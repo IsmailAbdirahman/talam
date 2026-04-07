@@ -18,40 +18,49 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        padding: EdgeInsets.all(14),
+      body: PageView.builder(
+        scrollDirection: Axis.vertical,
         itemCount: homeData.length,
         itemBuilder: (context, index) {
           return Container(
             width: double.infinity,
-            margin: EdgeInsets.only(bottom: 16),
-            padding: EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: getColors(index),
-              borderRadius: BorderRadius.circular(20),
-            ),
+            height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.all(14),
+            decoration: BoxDecoration(color: getColors(index)),
             child: Padding(
-              padding: const EdgeInsets.only(left: 9.0, right: 9.0),
+              padding: const EdgeInsets.all(21.0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  TextWidget(data: homeData[index].category),
-                  SizedBox(height: 15),
+                  Text(
+                    homeData[index].category,
+                    style: GoogleFonts.poppins(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[300],
+                    ),
+                  ),
+                  SizedBox(height: 75),
                   Align(
                     alignment: .centerRight,
                     child: TextWidget(data: homeData[index].arabicText),
                   ),
                   SizedBox(height: 15),
                   TextWidget(data: homeData[index].translation),
-                  SizedBox(height: 15),
-                  TextWidget(data: homeData[index].source),
-                  SizedBox(height: 15),
+                  SizedBox(height: 35),
+                  Text(
+                    homeData[index].source,
+                    style: GoogleFonts.poppins(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey[300],
+                    ),
+                  ),
+                  SizedBox(height: 85),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ShareAndFavButtons(),
-                      TextWidget(data: homeData[index].xp),
-                    ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [ShareAndFavButtons()],
                   ),
                 ],
               ),
@@ -70,8 +79,8 @@ class BackgroundIconColor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 21,
-      width: 21,
+      height: 41,
+      width: 41,
       decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.white24),
       child: widget,
     );
@@ -87,9 +96,9 @@ class TextWidget extends StatelessWidget {
     return Text(
       data,
       style: GoogleFonts.poppins(
-        fontSize: 11,
+        fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: Colors.white,
+        color: const Color.fromARGB(255, 234, 231, 231),
       ),
     );
   }
@@ -104,11 +113,15 @@ class ShareAndFavButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         BackgroundIconColor(
-          widget: Icon(Icons.favorite_border, size: 12, color: Colors.white),
+          widget: Icon(Icons.favorite, size: 20, color: Colors.white),
         ),
-        SizedBox(width: 60),
+        SizedBox(width: 20),
         BackgroundIconColor(
-          widget: Icon(Icons.share, size: 12, color: Colors.white),
+          widget: Icon(
+            Icons.arrow_upward_rounded,
+            size: 20,
+            color: Colors.white,
+          ),
         ),
       ],
     );
