@@ -1,72 +1,80 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:talam/home/home_model.dart';
+import 'package:talam/profile/profile.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
 
-  Color getColors(int index) {
-    List<Color> cardColors = [
-      Color(0xFF4B4ACF), // purple
-      Color(0xFF1A7A5E), // green
-      Color(0xFF8B2FC9), // violet
-      Color(0xFF1A6A8A), // blue
-    ];
-    return cardColors[index % cardColors.length];
-  }
+  // Color getColors(int index) {
+  //   List<Color> cardColors = [
+  //     Color(0xFF4B4ACF), // purple
+  //     Color(0xFF1A7A5E), // green
+  //     Color(0xFF8B2FC9), // violet
+  //     Color(0xFF1A6A8A), // blue
+  //   ];
+  //   return cardColors[index % cardColors.length];
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: homeData.length,
-        itemBuilder: (context, index) {
-          return Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height,
-            padding: EdgeInsets.all(14),
-            decoration: BoxDecoration(color: getColors(index)),
-            child: Padding(
-              padding: const EdgeInsets.all(21.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    homeData[index].category,
-                    style: GoogleFonts.poppins(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[300],
+      body: Stack(
+        children: [
+          PageView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: homeData.length,
+            itemBuilder: (context, index) {
+              return Container(
+                width: double.infinity,
+                padding: EdgeInsets.only(left: 45, right: 45),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 194, 194, 194),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          homeData[index].category,
+                          style: GoogleFonts.poppins(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: const Color.fromARGB(255, 43, 43, 43),
+                          ),
+                        ),
+                        SizedBox(height: 75),
+                        Align(
+                          alignment: .centerRight,
+                          child: TextWidget(data: homeData[index].arabicText),
+                        ),
+                        SizedBox(height: 15),
+                        TextWidget(data: homeData[index].translation),
+                        SizedBox(height: 35),
+                        Text(
+                          homeData[index].source,
+                          style: GoogleFonts.poppins(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            color: const Color.fromARGB(255, 43, 43, 43),
+                          ),
+                        ),
+                        SizedBox(height: 75),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [ShareAndFavButtons()],
+                        ),
+                      ],
                     ),
-                  ),
-                  SizedBox(height: 75),
-                  Align(
-                    alignment: .centerRight,
-                    child: TextWidget(data: homeData[index].arabicText),
-                  ),
-                  SizedBox(height: 15),
-                  TextWidget(data: homeData[index].translation),
-                  SizedBox(height: 35),
-                  Text(
-                    homeData[index].source,
-                    style: GoogleFonts.poppins(
-                      fontSize: 11,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.grey[300],
-                    ),
-                  ),
-                  SizedBox(height: 85),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [ShareAndFavButtons()],
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+                  ],
+                ),
+              );
+            },
+          ),
+          Positioned(bottom: 40, right: 45, child: ProfileAndFav()),
+        ],
       ),
     );
   }
@@ -98,7 +106,7 @@ class TextWidget extends StatelessWidget {
       style: GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: const Color.fromARGB(255, 234, 231, 231),
+        color: const Color.fromARGB(255, 43, 43, 43),
       ),
     );
   }
@@ -110,17 +118,49 @@ class ShareAndFavButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         BackgroundIconColor(
-          widget: Icon(Icons.favorite, size: 20, color: Colors.white),
+          widget: Icon(Icons.favorite, size: 20, color: Colors.black),
         ),
         SizedBox(width: 20),
         BackgroundIconColor(
           widget: Icon(
             Icons.arrow_upward_rounded,
             size: 20,
-            color: Colors.white,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ProfileAndFav extends StatelessWidget {
+  const ProfileAndFav({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        SizedBox(width: 20),
+        BackgroundIconColor(
+          widget: GestureDetector(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                builder: (context) => SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.9,
+                  child: ProfileScreen(),
+                ),
+              );
+            },
+
+            child: Icon(Icons.person, size: 20, color: Colors.black),
           ),
         ),
       ],
