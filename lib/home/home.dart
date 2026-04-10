@@ -73,7 +73,28 @@ class Home extends StatelessWidget {
               );
             },
           ),
-          Positioned(bottom: 40, right: 45, child: ProfileAndFav()),
+          Positioned(
+            bottom: 40,
+            right: 45,
+            child: GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  builder: (context) => ClipRRect(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20), // ✅ curves top left and right
+                    ),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.9,
+                      child: ProfileScreen(),
+                    ),
+                  ),
+                );
+              },
+              child: ProfileAndFav(),
+            ),
+          ),
         ],
       ),
     );
@@ -119,15 +140,25 @@ class ShareAndFavButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        BackgroundIconColor(
-          widget: Icon(Icons.favorite, size: 20, color: Colors.black),
+        GestureDetector(
+          onTap: () {
+            print("Liked POst");
+          },
+          child: BackgroundIconColor(
+            widget: Icon(Icons.favorite, size: 20, color: Colors.black),
+          ),
         ),
         SizedBox(width: 20),
-        BackgroundIconColor(
-          widget: Icon(
-            Icons.arrow_upward_rounded,
-            size: 20,
-            color: Colors.black,
+        GestureDetector(
+          onTap: () {
+            print("Shared Post");
+          },
+          child: BackgroundIconColor(
+            widget: Icon(
+              Icons.arrow_upward_rounded,
+              size: 20,
+              color: Colors.black,
+            ),
           ),
         ),
       ],
@@ -140,30 +171,8 @@ class ProfileAndFav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        SizedBox(width: 20),
-        BackgroundIconColor(
-          widget: GestureDetector(
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                builder: (context) => SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.9,
-                  child: ProfileScreen(),
-                ),
-              );
-            },
-
-            child: Icon(Icons.person, size: 20, color: Colors.black),
-          ),
-        ),
-      ],
+    return BackgroundIconColor(
+      widget: Icon(Icons.person, size: 20, color: Colors.black),
     );
   }
 }
