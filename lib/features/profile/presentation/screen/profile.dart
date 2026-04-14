@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:talam/fav/fav.dart';
-import 'package:talam/widgets/delete_account_dialog.dart';
+import 'package:talam/features/fav/presentation/screen/fav.dart';
+import 'package:talam/features/profile/presentation/widgets/delete_account_dialog.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

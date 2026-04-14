@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:talam/home/home.dart';
+import 'package:talam/features/home/presentation/screen/home_screen.dart';
 
 void main() {
   GoogleFonts.config.allowRuntimeFetching = false;
