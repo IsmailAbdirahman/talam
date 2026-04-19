@@ -25,7 +25,7 @@ class PageViewWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    quranAyahsData[index].surahNameEnglish,
+                    quranAyahsData[index].surah.nameEnglish,
                     style: GoogleFonts.poppins(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -35,13 +35,13 @@ class PageViewWidget extends StatelessWidget {
                   SizedBox(height: 75),
                   Align(
                     alignment: .centerRight,
-                    child: TextWidget(data: data[index].arabic),
+                    child: TextWidget(data: data[index].verse.arabic),
                   ),
                   SizedBox(height: 15),
-                  TextWidget(data: data[index].translation),
+                  TextWidget(data: data[index].verse.translation),
                   SizedBox(height: 35),
                   Text(
-                    "${data[index].surahNumber}:${data[index].ayahNumber}",
+                    "${data[index].surah.number}:${data[index].verse.ayah}",
                     style: GoogleFonts.poppins(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
