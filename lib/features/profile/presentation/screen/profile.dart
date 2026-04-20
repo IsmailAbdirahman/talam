@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:talam/features/auth/presentation/providers/current_user.dart';
 import 'package:talam/features/fav/presentation/screen/fav.dart';
 import 'package:talam/features/profile/presentation/widgets/delete_account_dialog.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 194, 194, 194),
       body: Padding(
@@ -19,21 +22,31 @@ class ProfileScreen extends StatelessWidget {
             Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black26, width: 2),
-                        shape: BoxShape.circle,
-                        color: Colors.white24,
-                      ),
-                      child: Icon(Icons.person, size: 20, color: Colors.black),
+                    Row(
+                      children: [
+                        Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black26, width: 2),
+                            shape: BoxShape.circle,
+                            color: Colors.white24,
+                          ),
+                          child: Icon(
+                            Icons.person,
+                            size: 20,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 14.0),
+                          child: Text(user?.fullName ?? "User"),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 14.0),
-                      child: Text("Ejuu"),
-                    ),
+                    Icon(Icons.logout_rounded, color: Colors.black38),
                   ],
                 ),
                 SizedBox(height: 40),

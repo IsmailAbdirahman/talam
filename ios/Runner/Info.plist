@@ -22,6 +22,42 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+
+
+
+
+
+
+<key>CFBundleURLTypes</key>
+  <array>
+    <dict>
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+      <key>CFBundleURLName</key>
+      <string>supabase-callback</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>io.supabase.talam</string>
+      </array>
+    </dict>
+    <dict>
+      <key>CFBundleTypeRole</key>
+      <string>Editor</string>
+      <key>CFBundleURLName</key>
+      <string>google-signin</string>
+      <key>CFBundleURLSchemes</key>
+      <array>
+        <string>com.googleusercontent.apps.458235562976-08u2a6j9bi3nhj3r4jt22etsdhlk7fih</string>
+      </array>
+    </dict>
+  </array>
+
+
+
+
+
+
+
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
