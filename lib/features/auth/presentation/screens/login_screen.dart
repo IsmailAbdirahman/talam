@@ -12,7 +12,7 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authControllerProvider).isLoading;
+    ref.watch(authControllerProvider).isLoading;
     final isGoogleLoading = ref
         .watch(authControllerProvider.notifier)
         .isGoogleLoading;
