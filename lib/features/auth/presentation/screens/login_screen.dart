@@ -12,8 +12,13 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authState = ref.watch(authControllerProvider);
-    final isLoading = authState.isLoading;
+    final authState = ref.watch(authControllerProvider).isLoading;
+    final isGoogleLoading = ref
+        .watch(authControllerProvider.notifier)
+        .isGoogleLoading;
+    final isAppleLoading = ref
+        .watch(authControllerProvider.notifier)
+        .isAppleLoading;
 
     // Surface any auth error as a snackbar.
     ref.listen(authControllerProvider, (previous, next) {
@@ -72,7 +77,7 @@ class LoginScreen extends ConsumerWidget {
               // Google
               SocialAuthButton(
                 label: 'Continue with Google',
-                isLoading: isLoading,
+                isLoading: isGoogleLoading,
                 icon: const _GoogleLogo(),
                 onPressed: () => ref
                     .read(authControllerProvider.notifier)
@@ -82,7 +87,7 @@ class LoginScreen extends ConsumerWidget {
                 const SizedBox(height: 12),
                 SocialAuthButton(
                   label: 'Continue with Apple',
-                  isLoading: isLoading,
+                  isLoading: isAppleLoading,
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
                   icon: const Icon(Icons.apple, color: Colors.white, size: 22),

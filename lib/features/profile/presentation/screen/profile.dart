@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:talam/features/auth/presentation/providers/auth_controller.dart';
 import 'package:talam/features/auth/presentation/providers/current_user.dart';
 import 'package:talam/features/fav/presentation/screen/fav.dart';
 import 'package:talam/features/profile/presentation/widgets/delete_account_dialog.dart';
@@ -46,7 +47,12 @@ class ProfileScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    Icon(Icons.logout_rounded, color: Colors.black38),
+                    GestureDetector(
+                      onTap: () {
+                        ref.read(authControllerProvider.notifier).signOut();
+                      },
+                      child: Icon(Icons.logout_rounded, color: Colors.black38),
+                    ),
                   ],
                 ),
                 SizedBox(height: 40),

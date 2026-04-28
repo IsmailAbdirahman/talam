@@ -26,8 +26,9 @@ class SocialAuthButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: backgroundColor ?? Colors.white,
         foregroundColor: foregroundColor ?? const Color(0xFF111111),
-        disabledBackgroundColor: (backgroundColor ?? Colors.white)
-            .withValues(alpha: 0.7),
+        disabledBackgroundColor: (backgroundColor ?? Colors.white).withValues(
+          alpha: 0.7,
+        ),
       ),
       child: isLoading
           ? SizedBox(

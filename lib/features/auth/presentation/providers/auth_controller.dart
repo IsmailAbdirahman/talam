@@ -5,23 +5,31 @@ import '../../data/auth_repository.dart';
 
 part 'auth_controller.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AuthController extends _$AuthController {
+  bool isGoogleLoading = false;
+  bool isAppleLoading = false;
   @override
   Future<void> build() async {}
 
   Future<void> signInWithGoogle() async {
+    isGoogleLoading = true;
     state = const AsyncLoading();
-    state = await AsyncValue.guard(
+    final result = await AsyncValue.guard(
       () => ref.read(authRepositoryProvider).signInWithGoogle(),
     );
+    isGoogleLoading = false;
+    state = result;
   }
 
   Future<void> signInWithApple() async {
+    isAppleLoading = true;
     state = const AsyncLoading();
-    state = await AsyncValue.guard(
+    final result = await AsyncValue.guard(
       () => ref.read(authRepositoryProvider).signInWithApple(),
     );
+    isAppleLoading = false;
+    state = result;
   }
 
   Future<void> signOut() async {

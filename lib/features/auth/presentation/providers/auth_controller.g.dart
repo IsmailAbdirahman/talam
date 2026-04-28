@@ -20,7 +20,7 @@ final class AuthControllerProvider
         argument: null,
         retry: null,
         name: r'authControllerProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -33,7 +33,7 @@ final class AuthControllerProvider
   AuthController create() => AuthController();
 }
 
-String _$authControllerHash() => r'211b2221ea74867ca83c81cff367df28ac341ee2';
+String _$authControllerHash() => r'1adc50b6cfebd8d42b2ea353a0cef46f571b0cd2';
 
 abstract class _$AuthController extends $AsyncNotifier<void> {
   FutureOr<void> build();
