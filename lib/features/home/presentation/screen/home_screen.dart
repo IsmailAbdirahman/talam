@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:talam/features/common/page_view_widget.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
 import 'package:talam/features/home/presentation/widgets/profile_and_fav.dart';
+import 'package:talam/features/home/repository/quran_repositary.dart';
 import 'package:talam/features/profile/presentation/screen/profile.dart';
 
-class Home extends StatelessWidget {
+class Home extends ConsumerWidget {
   const Home({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final data = ref.watch(quranAyaatProvider);
     return Scaffold(
       body: Stack(
         children: [
-          PageViewWidget(data: quranAyahsData),
+          data.when(
+            loading: () => Center(child: CircularProgressIndicator()),
+            error: (e, _) => Text('Error'),
+            data: (list) => PageViewWidget(data: list),
+          ),
+
           Positioned(
             bottom: 40,
             right: 45,

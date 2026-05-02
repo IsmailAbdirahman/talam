@@ -8,7 +8,7 @@ import 'package:talam/features/auth/core/theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  GoogleFonts.config.allowRuntimeFetching = false;
+  GoogleFonts.config.allowRuntimeFetching = true;
 
   await Supabase.initialize(
     url: SupabaseConfig.url,
