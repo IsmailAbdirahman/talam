@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:talam/features/common/page_view_widget.dart';
-import 'package:talam/features/home/domain/quran_ayah.dart';
 import 'package:talam/features/home/presentation/widgets/profile_and_fav.dart';
 import 'package:talam/features/home/repository/quran_repositary.dart';
 import 'package:talam/features/profile/presentation/screen/profile.dart';
