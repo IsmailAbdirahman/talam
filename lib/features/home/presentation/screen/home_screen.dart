@@ -12,6 +12,14 @@ class Home extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(quranAyaatProvider);
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 194, 194, 194),
+      appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: Color.fromARGB(255, 194, 194, 194),
+
+        //leading: CloseButton(onPressed: () => Navigator.pop(context)),
+      ),
       body: Stack(
         children: [
           data.when(
