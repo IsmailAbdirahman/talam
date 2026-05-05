@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:talam/features/common/page_view_widget.dart';
 import 'package:talam/features/fav/service/fav_service.dart';
-import 'package:talam/features/home/domain/quran_ayah.dart';
 
 class FavScreen extends ConsumerWidget {
   const FavScreen({super.key});
