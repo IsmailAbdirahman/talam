@@ -19,76 +19,109 @@ class PageViewWidget extends ConsumerWidget {
 
         return Container(
           color: const Color.fromARGB(255, 194, 194, 194),
-          child: CustomScrollView(
-            // BouncingScrollPhysics makes it feel smooth on both iOS and Android
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              SliverFillRemaining(
-                hasScrollBody:
-                    false, // Essential for centering + scrolling logic
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 45,
-                    vertical: 30,
-                  ),
+          padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 60),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                ayah.surah.nameEnglish,
+                style: GoogleFonts.poppins(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: const Color.fromARGB(255, 43, 43, 43),
+                ),
+              ),
+              const SizedBox(height: 40),
+
+              // Scrollable middle with auto fade if long
+              Flexible(
+                child: _ScrollWithFade(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      // 1. Surah Name
-                      Text(
-                        ayah.surah.nameEnglish,
-                        style: GoogleFonts.poppins(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: const Color.fromARGB(255, 43, 43, 43),
-                        ),
-                      ),
-
-                      const SizedBox(height: 60),
-
-                      // 2. Arabic Text
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextWidget(data: ayah.verse.arabic),
                       ),
-
                       const SizedBox(height: 20),
-
-                      // 3. Translation Text
                       TextWidget(data: ayah.verse.translation),
-
-                      const SizedBox(height: 35),
-
-                      // 4. Reference (Surah:Ayah)
-                      Text(
-                        "${ayah.surah.number}:${ayah.verse.ayah}",
-                        style: GoogleFonts.poppins(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w600,
-                          color: const Color.fromARGB(255, 43, 43, 43),
-                        ),
-                      ),
-
-                      // This pushes the buttons to the bottom of the screen if
-                      // there is extra space, but disappears if the text is long.
-                      const Spacer(),
-
-                      const SizedBox(height: 40),
-
-                      // 5. Action Buttons
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [ShareAndFavButtons(quranAyah: ayah)],
-                      ),
                     ],
                   ),
                 ),
+              ),
+
+              const SizedBox(height: 35),
+              Text(
+                "${ayah.surah.number}:${ayah.verse.ayah}",
+                style: GoogleFonts.poppins(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: const Color.fromARGB(255, 43, 43, 43),
+                ),
+              ),
+              const SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [ShareAndFavButtons(quranAyah: ayah)],
               ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+// Scrollable widget that adds a fade gradient at the bottom only when content
+// is taller than its container (i.e. when it actually needs to be scrolled).
+class _ScrollWithFade extends StatefulWidget {
+  final Widget child;
+  const _ScrollWithFade({required this.child});
+
+  @override
+  State<_ScrollWithFade> createState() => _ScrollWithFadeState();
+}
+
+class _ScrollWithFadeState extends State<_ScrollWithFade> {
+  final _controller = ScrollController();
+  bool _needsFade = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_controller.hasClients && _controller.position.maxScrollExtent > 0) {
+        setState(() => _needsFade = true);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scrollView = SingleChildScrollView(
+      controller: _controller,
+      physics: const BouncingScrollPhysics(),
+      child: widget.child,
+    );
+
+    if (!_needsFade) return scrollView;
+
+    return ShaderMask(
+      shaderCallback: (bounds) => const LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [Colors.black, Colors.black, Colors.transparent],
+        stops: [0.0, 0.85, 1.0],
+      ).createShader(bounds),
+      blendMode: BlendMode.dstIn,
+      child: scrollView,
     );
   }
 }
