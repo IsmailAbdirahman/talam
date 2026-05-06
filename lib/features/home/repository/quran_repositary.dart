@@ -126,16 +126,16 @@ class QuranRepositary {
 
   Future<List<QuranAyah>> getQuranAyaat() async {
     final random = Random();
-    final List<QuranAyah> quranList = [];
+    final futures = <Future<QuranAyah>>[];
 
     for (int i = 0; i < 15; i++) {
       final surahNumber = random.nextInt(114) + 1;
       final maxAyah = surahAyahCount[surahNumber]!;
-      final ayah = random.nextInt(maxAyah) + 1;
-      quranList.add(await homeService.fetchRandomAyah(surahNumber, ayah));
+      final ayahNumber = random.nextInt(maxAyah) + 1;
+      futures.add(homeService.fetchRandomAyah(surahNumber, ayahNumber));
     }
 
-    return quranList;
+    return Future.wait(futures);
   }
 }
 
