@@ -11,30 +11,27 @@ class ShareAndFavButtons extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = ref.watch(favouritesControllerProvider.notifier);
+    final favsAsync = ref.watch(favouritesControllerProvider);
+
+    final isFavourite = favsAsync.maybeWhen(
+      data: (list) => list.any(
+        (a) =>
+            a.surah.number == quranAyah.surah.number &&
+            a.verse.ayah == quranAyah.verse.ayah,
+      ),
+      orElse: () => false,
+    );
 
     return Row(
       children: [
-        GestureDetector(
-          onTap: () {
-            controller.toggleFavourite(quranAyah);
-          },
-          child: BackgroundIconColor(
-            widget: Icon(Icons.favorite, size: 20, color: Colors.black),
+        IconButton(
+          icon: Icon(
+            isFavourite ? Icons.favorite : Icons.favorite_border,
+            color: isFavourite ? Colors.red : Colors.grey[700],
           ),
+          onPressed: () => controller.toggleFavourite(quranAyah),
         ),
-        SizedBox(width: 20),
-        GestureDetector(
-          onTap: () {
-            print("Shared Post");
-          },
-          child: BackgroundIconColor(
-            widget: Icon(
-              Icons.arrow_upward_rounded,
-              size: 20,
-              color: Colors.black,
-            ),
-          ),
-        ),
+        IconButton(icon: const Icon(Icons.share), onPressed: () {}),
       ],
     );
   }
