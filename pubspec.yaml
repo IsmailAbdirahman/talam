@@ -46,7 +46,13 @@ dependencies:
   riverpod_annotation: ^3.0.3
   go_router: ^17.2.1
   http: ^1.6.0
-  
+  screenshot: ^3.0.0
+  path_provider: ^2.1.5
+  gal: ^2.3.2  
+
+
+
+
 
 dev_dependencies:
   flutter_test:

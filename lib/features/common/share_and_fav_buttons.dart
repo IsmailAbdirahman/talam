@@ -30,7 +30,7 @@ class ShareAndFavButtons extends ConsumerWidget {
           ),
           onPressed: () => controller.toggleFavourite(quranAyah),
         ),
-        IconButton(icon: const Icon(Icons.share), onPressed: () {}),
+        Icon(Icons.share),
       ],
     );
   }

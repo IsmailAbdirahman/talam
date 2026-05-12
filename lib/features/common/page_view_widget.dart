@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:talam/features/common/share_and_fav_buttons.dart';
 import 'package:talam/features/common/text_widgets.dart';
+import 'package:talam/features/fav/presentation/widgets/share_social_media.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
 
 class PageViewWidget extends ConsumerWidget {
@@ -63,7 +64,28 @@ class PageViewWidget extends ConsumerWidget {
               const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [ShareAndFavButtons(quranAyah: ayah)],
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(24),
+                          ),
+                          child: SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.9,
+                            child: ShareSocialMedia(quranAyah: ayah),
+                          ),
+                        ),
+                      );
+                    },
+
+                    child: ShareAndFavButtons(quranAyah: ayah),
+                  ),
+                ],
               ),
             ],
           ),
