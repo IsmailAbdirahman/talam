@@ -28,7 +28,7 @@ class ShareSocialMedia extends StatelessWidget {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Saved to Photos. Share from Instagram!'),
+          content: Text('Saved to Photos'),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -72,9 +72,9 @@ class ShareSocialMedia extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                icon: const Icon(Icons.share),
+                icon: const Icon(Icons.save_alt_rounded),
                 label: Text(
-                  'Share',
+                  'Save Photo',
                   style: GoogleFonts.poppins(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
