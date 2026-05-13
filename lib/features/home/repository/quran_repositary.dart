@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
 import 'package:talam/features/home/service/home_service.dart';
 
@@ -124,7 +126,22 @@ const Map<int, int> surahAyahCount = {
 class QuranRepositary {
   HomeService homeService = HomeService();
 
-  Future<List<QuranAyah>> getQuranAyaat() async {
+  static const _ayahsKey = 'todays_ayahs';
+  static const _dateKey = 'todays_date';
+
+  Future<List<QuranAyah>> getQuranAyaat({bool forceRefresh = false}) async {
+    final prefs = await SharedPreferences.getInstance();
+    final today = _formatDate(DateTime.now());
+    final savedDate = prefs.getString(_dateKey);
+    final savedAyahs = prefs.getString(_ayahsKey);
+
+    // If we have today's set saved and not forcing refresh → return saved
+    if (!forceRefresh && savedDate == today && savedAyahs != null) {
+      final List<dynamic> list = jsonDecode(savedAyahs);
+      return list.map((e) => QuranAyah.fromJson(e)).toList();
+    }
+
+    // Otherwise fetch fresh 15
     final random = Random();
     final futures = <Future<QuranAyah>>[];
 
@@ -135,7 +152,18 @@ class QuranRepositary {
       futures.add(homeService.fetchRandomAyah(surahNumber, ayahNumber));
     }
 
-    return Future.wait(futures);
+    final ayahs = await Future.wait(futures);
+
+    // Save to local storage
+    final encoded = jsonEncode(ayahs.map((a) => a.toJson()).toList());
+    await prefs.setString(_ayahsKey, encoded);
+    await prefs.setString(_dateKey, today);
+
+    return ayahs;
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.year}-${date.month}-${date.day}';
   }
 }
 

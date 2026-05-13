@@ -51,6 +51,7 @@ dependencies:
   gal: ^2.3.2  
   shared_preferences: ^2.3.2
   auto_size_text: ^3.0.0
+  in_app_review: ^2.0.11
 
 
 

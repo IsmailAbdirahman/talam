@@ -9,11 +9,14 @@ import 'package:talam/features/home/domain/quran_ayah.dart';
 
 class PageViewWidget extends ConsumerWidget {
   final List<QuranAyah> data;
-  const PageViewWidget({super.key, required this.data});
+  final PageController? controller;
+
+  const PageViewWidget({super.key, required this.data, this.controller});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return PageView.builder(
+      controller: controller, // ← add this line
       scrollDirection: Axis.vertical,
       itemCount: data.length,
       itemBuilder: (context, index) {

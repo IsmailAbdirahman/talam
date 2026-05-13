@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:talam/features/auth/presentation/providers/auth_controller.dart';
 import 'package:talam/features/auth/presentation/providers/current_user.dart';
 import 'package:talam/features/common/provider/theme_notifier.dart';
@@ -22,8 +23,8 @@ class ProfileScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(19.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
 
+          //   crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
               children: [
@@ -48,7 +49,14 @@ class ProfileScreen extends ConsumerWidget {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 14.0),
-                          child: Text(user?.fullName ?? "User"),
+                          child: Text(
+                            user?.fullName ?? "User",
+                            style: GoogleFonts.poppins(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -148,21 +156,66 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            OutlinedButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => DeleteAccountDialog(),
-                );
-              },
-              child: Text(
-                "Delete Account",
-                style: TextStyle(color: Colors.red),
-              ),
+
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                RatingApp(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: OutlinedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => DeleteAccountDialog(),
+                      );
+                    },
+                    child: Text(
+                      "Delete Account",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class RatingApp extends StatelessWidget {
+  const RatingApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        "Rate the App",
+        style: GoogleFonts.poppins(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+      trailing: Icon(
+        Icons.star_outline_rounded,
+        color: Theme.of(context).colorScheme.onSurface,
+        size: 22,
+      ),
+      onTap: () async {
+        final InAppReview inAppReview = InAppReview.instance;
+
+        if (await inAppReview.isAvailable()) {
+          inAppReview.requestReview();
+        } else {
+          // Fallback — open App Store directly
+          inAppReview.openStoreListing(
+            appStoreId: 'YOUR_APP_STORE_ID', // get this after publishing
+          );
+        }
+      },
     );
   }
 }
