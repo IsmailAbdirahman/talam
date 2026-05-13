@@ -204,15 +204,35 @@ class _ShareCard extends ConsumerWidget {
           // App name at bottom
           Padding(
             padding: const EdgeInsets.only(top: 30),
-            child: Text(
-              'Talam App',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                fontSize: 13,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
-                color: const Color.fromARGB(255, 43, 43, 43),
-              ),
+            child: Column(
+              children: [
+                Text(
+                  'Talam App',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                    color: const Color.fromARGB(255, 43, 43, 43),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'Daily Quran Verses',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                    letterSpacing: 1,
+                    color: const Color.fromARGB(
+                      255,
+                      43,
+                      43,
+                      43,
+                    ).withValues(alpha: 0.6),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

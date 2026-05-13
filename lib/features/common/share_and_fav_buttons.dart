@@ -32,7 +32,9 @@ class ShareAndFavButtons extends ConsumerWidget {
         IconButton(
           icon: Icon(
             isFavourite ? Icons.favorite : Icons.favorite_border,
-            color: isFavourite ? Colors.red : Colors.grey[700],
+            color: isFavourite
+                ? Colors.red
+                : Theme.of(context).colorScheme.onSurface,
           ),
           onPressed: () => controller.toggleFavourite(quranAyah),
         ),

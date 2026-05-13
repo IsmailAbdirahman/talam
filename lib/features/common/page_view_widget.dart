@@ -29,6 +29,22 @@ class PageViewWidget extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Today's label
+              Text(
+                "Today's Verses",
+                style: GoogleFonts.poppins(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1.5,
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.4),
+                ),
+              ),
+
+              const SizedBox(height: 12),
+
+              // Surah name
               Text(
                 ayah.surah.nameEnglish,
                 style: GoogleFonts.poppins(
