@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:talam/features/auth/presentation/providers/auth_controller.dart';
 import 'package:talam/features/auth/presentation/providers/current_user.dart';
 import 'package:talam/features/common/provider/theme_notifier.dart';
+import 'package:talam/features/common/provider/translation_notifier.dart';
 import 'package:talam/features/fav/presentation/screen/fav.dart';
 import 'package:talam/features/profile/presentation/widgets/delete_account_dialog.dart';
 
@@ -61,39 +63,87 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: 40),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.bookmarks_rounded,
-                          color: const Color.fromARGB(221, 35, 34, 34),
-                        ),
-                        Text("Saved"),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => FavScreen()),
-                        );
-                      },
-                      child: Icon(
-                        Icons.arrow_forward_ios_rounded,
-                        color: const Color.fromARGB(221, 35, 34, 34),
-                      ),
-                    ),
-                  ],
+                // Divider
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                  child: Container(
+                    height: 1,
+                    width: double.infinity,
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurface.withValues(alpha: 0.15),
+                  ),
                 ),
+
+                SizedBox(height: 80),
+
                 ListTile(
-                  title: const Text('Dark Mode'),
+                  title: Text(
+                    "Favourites",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  trailing: Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: Theme.of(context).colorScheme.onSurface,
+                    size: 18,
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FavScreen()),
+                    );
+                  },
+                ),
+
+                ListTile(
+                  title: Text(
+                    "Dark Mode",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
                   trailing: Switch(
                     value: isDark,
                     onChanged: (_) => ref.read(themeProvider.notifier).toggle(),
+                  ),
+                ),
+
+                ListTile(
+                  title: Text(
+                    "Translation",
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                  trailing: DropdownButton<String>(
+                    value: ref.watch(translationProvider),
+                    underline: const SizedBox.shrink(),
+                    items: const [
+                      DropdownMenuItem(
+                        value: 'sahih_international',
+                        child: Text('Sahih International'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'pickthall',
+                        child: Text('Pickthall'),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        ref
+                            .read(translationProvider.notifier)
+                            .setTranslation(value);
+                      }
+                    },
                   ),
                 ),
               ],

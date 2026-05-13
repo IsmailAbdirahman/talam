@@ -1,10 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gal/gal.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:talam/features/common/provider/translation_notifier.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -91,12 +93,14 @@ class ShareSocialMedia extends StatelessWidget {
 }
 
 // ── The card UI that gets shared as an image ─────────────────────────────────
-class _ShareCard extends StatelessWidget {
+class _ShareCard extends ConsumerWidget {
   final QuranAyah quranAyah;
   const _ShareCard({required this.quranAyah});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final translationKey = ref.watch(translationProvider);
+
     return Container(
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -169,7 +173,7 @@ class _ShareCard extends StatelessWidget {
           // Translation
           Flexible(
             child: AutoSizeText(
-              quranAyah.verse.translation,
+              quranAyah.verse.translations[translationKey] ?? '',
               textAlign: TextAlign.center,
               maxLines: 10,
               minFontSize: 8,

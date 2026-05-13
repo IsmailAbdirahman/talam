@@ -16,7 +16,7 @@ class FavouritesRepository {
       'surah_name_english': quranAyah.surah.nameEnglish,
       'ayah_number': quranAyah.verse.ayah,
       'arabic': quranAyah.verse.arabic,
-      'translation': quranAyah.verse.translation,
+      'translation': quranAyah.verse.translations,
     });
   }
 
@@ -50,7 +50,10 @@ class FavouritesRepository {
           ayah: item['ayah_number'],
           arabic: item['arabic'],
           transliteration: '',
-          translation: item['translation'],
+          translations: {
+            'sahih_international': item['translation'] ?? '',
+            'pickthall': item['translation'] ?? '',
+          },
         ),
       );
     }).toList();

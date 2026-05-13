@@ -299,7 +299,7 @@ as String,
 /// @nodoc
 mixin _$QuranVerse implements DiagnosticableTreeMixin {
 
-@JsonKey(name: 'verse_key') String get verseKey; int get ayah; String get arabic; String get transliteration;@JsonKey(name: 'translations', fromJson: _translationFromJson) String get translation;
+@JsonKey(name: 'verse_key') String get verseKey; int get ayah; String get arabic; String get transliteration;@JsonKey(name: 'translations', fromJson: _translationsFromJson) Map<String, String> get translations;
 /// Create a copy of QuranVerse
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -313,21 +313,21 @@ $QuranVerseCopyWith<QuranVerse> get copyWith => _$QuranVerseCopyWithImpl<QuranVe
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'QuranVerse'))
-    ..add(DiagnosticsProperty('verseKey', verseKey))..add(DiagnosticsProperty('ayah', ayah))..add(DiagnosticsProperty('arabic', arabic))..add(DiagnosticsProperty('transliteration', transliteration))..add(DiagnosticsProperty('translation', translation));
+    ..add(DiagnosticsProperty('verseKey', verseKey))..add(DiagnosticsProperty('ayah', ayah))..add(DiagnosticsProperty('arabic', arabic))..add(DiagnosticsProperty('transliteration', transliteration))..add(DiagnosticsProperty('translations', translations));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is QuranVerse&&(identical(other.verseKey, verseKey) || other.verseKey == verseKey)&&(identical(other.ayah, ayah) || other.ayah == ayah)&&(identical(other.arabic, arabic) || other.arabic == arabic)&&(identical(other.transliteration, transliteration) || other.transliteration == transliteration)&&(identical(other.translation, translation) || other.translation == translation));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is QuranVerse&&(identical(other.verseKey, verseKey) || other.verseKey == verseKey)&&(identical(other.ayah, ayah) || other.ayah == ayah)&&(identical(other.arabic, arabic) || other.arabic == arabic)&&(identical(other.transliteration, transliteration) || other.transliteration == transliteration)&&const DeepCollectionEquality().equals(other.translations, translations));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,verseKey,ayah,arabic,transliteration,translation);
+int get hashCode => Object.hash(runtimeType,verseKey,ayah,arabic,transliteration,const DeepCollectionEquality().hash(translations));
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'QuranVerse(verseKey: $verseKey, ayah: $ayah, arabic: $arabic, transliteration: $transliteration, translation: $translation)';
+  return 'QuranVerse(verseKey: $verseKey, ayah: $ayah, arabic: $arabic, transliteration: $transliteration, translations: $translations)';
 }
 
 
@@ -338,7 +338,7 @@ abstract mixin class $QuranVerseCopyWith<$Res>  {
   factory $QuranVerseCopyWith(QuranVerse value, $Res Function(QuranVerse) _then) = _$QuranVerseCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'verse_key') String verseKey, int ayah, String arabic, String transliteration,@JsonKey(name: 'translations', fromJson: _translationFromJson) String translation
+@JsonKey(name: 'verse_key') String verseKey, int ayah, String arabic, String transliteration,@JsonKey(name: 'translations', fromJson: _translationsFromJson) Map<String, String> translations
 });
 
 
@@ -355,14 +355,14 @@ class _$QuranVerseCopyWithImpl<$Res>
 
 /// Create a copy of QuranVerse
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? verseKey = null,Object? ayah = null,Object? arabic = null,Object? transliteration = null,Object? translation = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? verseKey = null,Object? ayah = null,Object? arabic = null,Object? transliteration = null,Object? translations = null,}) {
   return _then(_self.copyWith(
 verseKey: null == verseKey ? _self.verseKey : verseKey // ignore: cast_nullable_to_non_nullable
 as String,ayah: null == ayah ? _self.ayah : ayah // ignore: cast_nullable_to_non_nullable
 as int,arabic: null == arabic ? _self.arabic : arabic // ignore: cast_nullable_to_non_nullable
 as String,transliteration: null == transliteration ? _self.transliteration : transliteration // ignore: cast_nullable_to_non_nullable
-as String,translation: null == translation ? _self.translation : translation // ignore: cast_nullable_to_non_nullable
-as String,
+as String,translations: null == translations ? _self.translations : translations // ignore: cast_nullable_to_non_nullable
+as Map<String, String>,
   ));
 }
 
@@ -447,10 +447,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'verse_key')  String verseKey,  int ayah,  String arabic,  String transliteration, @JsonKey(name: 'translations', fromJson: _translationFromJson)  String translation)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'verse_key')  String verseKey,  int ayah,  String arabic,  String transliteration, @JsonKey(name: 'translations', fromJson: _translationsFromJson)  Map<String, String> translations)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _QuranVerse() when $default != null:
-return $default(_that.verseKey,_that.ayah,_that.arabic,_that.transliteration,_that.translation);case _:
+return $default(_that.verseKey,_that.ayah,_that.arabic,_that.transliteration,_that.translations);case _:
   return orElse();
 
 }
@@ -468,10 +468,10 @@ return $default(_that.verseKey,_that.ayah,_that.arabic,_that.transliteration,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'verse_key')  String verseKey,  int ayah,  String arabic,  String transliteration, @JsonKey(name: 'translations', fromJson: _translationFromJson)  String translation)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'verse_key')  String verseKey,  int ayah,  String arabic,  String transliteration, @JsonKey(name: 'translations', fromJson: _translationsFromJson)  Map<String, String> translations)  $default,) {final _that = this;
 switch (_that) {
 case _QuranVerse():
-return $default(_that.verseKey,_that.ayah,_that.arabic,_that.transliteration,_that.translation);case _:
+return $default(_that.verseKey,_that.ayah,_that.arabic,_that.transliteration,_that.translations);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -488,10 +488,10 @@ return $default(_that.verseKey,_that.ayah,_that.arabic,_that.transliteration,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'verse_key')  String verseKey,  int ayah,  String arabic,  String transliteration, @JsonKey(name: 'translations', fromJson: _translationFromJson)  String translation)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'verse_key')  String verseKey,  int ayah,  String arabic,  String transliteration, @JsonKey(name: 'translations', fromJson: _translationsFromJson)  Map<String, String> translations)?  $default,) {final _that = this;
 switch (_that) {
 case _QuranVerse() when $default != null:
-return $default(_that.verseKey,_that.ayah,_that.arabic,_that.transliteration,_that.translation);case _:
+return $default(_that.verseKey,_that.ayah,_that.arabic,_that.transliteration,_that.translations);case _:
   return null;
 
 }
@@ -503,14 +503,20 @@ return $default(_that.verseKey,_that.ayah,_that.arabic,_that.transliteration,_th
 @JsonSerializable()
 
 class _QuranVerse with DiagnosticableTreeMixin implements QuranVerse {
-  const _QuranVerse({@JsonKey(name: 'verse_key') required this.verseKey, required this.ayah, required this.arabic, required this.transliteration, @JsonKey(name: 'translations', fromJson: _translationFromJson) required this.translation});
+  const _QuranVerse({@JsonKey(name: 'verse_key') required this.verseKey, required this.ayah, required this.arabic, required this.transliteration, @JsonKey(name: 'translations', fromJson: _translationsFromJson) required final  Map<String, String> translations}): _translations = translations;
   factory _QuranVerse.fromJson(Map<String, dynamic> json) => _$QuranVerseFromJson(json);
 
 @override@JsonKey(name: 'verse_key') final  String verseKey;
 @override final  int ayah;
 @override final  String arabic;
 @override final  String transliteration;
-@override@JsonKey(name: 'translations', fromJson: _translationFromJson) final  String translation;
+ final  Map<String, String> _translations;
+@override@JsonKey(name: 'translations', fromJson: _translationsFromJson) Map<String, String> get translations {
+  if (_translations is EqualUnmodifiableMapView) return _translations;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableMapView(_translations);
+}
+
 
 /// Create a copy of QuranVerse
 /// with the given fields replaced by the non-null parameter values.
@@ -526,21 +532,21 @@ Map<String, dynamic> toJson() {
 void debugFillProperties(DiagnosticPropertiesBuilder properties) {
   properties
     ..add(DiagnosticsProperty('type', 'QuranVerse'))
-    ..add(DiagnosticsProperty('verseKey', verseKey))..add(DiagnosticsProperty('ayah', ayah))..add(DiagnosticsProperty('arabic', arabic))..add(DiagnosticsProperty('transliteration', transliteration))..add(DiagnosticsProperty('translation', translation));
+    ..add(DiagnosticsProperty('verseKey', verseKey))..add(DiagnosticsProperty('ayah', ayah))..add(DiagnosticsProperty('arabic', arabic))..add(DiagnosticsProperty('transliteration', transliteration))..add(DiagnosticsProperty('translations', translations));
 }
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _QuranVerse&&(identical(other.verseKey, verseKey) || other.verseKey == verseKey)&&(identical(other.ayah, ayah) || other.ayah == ayah)&&(identical(other.arabic, arabic) || other.arabic == arabic)&&(identical(other.transliteration, transliteration) || other.transliteration == transliteration)&&(identical(other.translation, translation) || other.translation == translation));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _QuranVerse&&(identical(other.verseKey, verseKey) || other.verseKey == verseKey)&&(identical(other.ayah, ayah) || other.ayah == ayah)&&(identical(other.arabic, arabic) || other.arabic == arabic)&&(identical(other.transliteration, transliteration) || other.transliteration == transliteration)&&const DeepCollectionEquality().equals(other._translations, _translations));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,verseKey,ayah,arabic,transliteration,translation);
+int get hashCode => Object.hash(runtimeType,verseKey,ayah,arabic,transliteration,const DeepCollectionEquality().hash(_translations));
 
 @override
 String toString({ DiagnosticLevel minLevel = DiagnosticLevel.info }) {
-  return 'QuranVerse(verseKey: $verseKey, ayah: $ayah, arabic: $arabic, transliteration: $transliteration, translation: $translation)';
+  return 'QuranVerse(verseKey: $verseKey, ayah: $ayah, arabic: $arabic, transliteration: $transliteration, translations: $translations)';
 }
 
 
@@ -551,7 +557,7 @@ abstract mixin class _$QuranVerseCopyWith<$Res> implements $QuranVerseCopyWith<$
   factory _$QuranVerseCopyWith(_QuranVerse value, $Res Function(_QuranVerse) _then) = __$QuranVerseCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'verse_key') String verseKey, int ayah, String arabic, String transliteration,@JsonKey(name: 'translations', fromJson: _translationFromJson) String translation
+@JsonKey(name: 'verse_key') String verseKey, int ayah, String arabic, String transliteration,@JsonKey(name: 'translations', fromJson: _translationsFromJson) Map<String, String> translations
 });
 
 
@@ -568,14 +574,14 @@ class __$QuranVerseCopyWithImpl<$Res>
 
 /// Create a copy of QuranVerse
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? verseKey = null,Object? ayah = null,Object? arabic = null,Object? transliteration = null,Object? translation = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? verseKey = null,Object? ayah = null,Object? arabic = null,Object? transliteration = null,Object? translations = null,}) {
   return _then(_QuranVerse(
 verseKey: null == verseKey ? _self.verseKey : verseKey // ignore: cast_nullable_to_non_nullable
 as String,ayah: null == ayah ? _self.ayah : ayah // ignore: cast_nullable_to_non_nullable
 as int,arabic: null == arabic ? _self.arabic : arabic // ignore: cast_nullable_to_non_nullable
 as String,transliteration: null == transliteration ? _self.transliteration : transliteration // ignore: cast_nullable_to_non_nullable
-as String,translation: null == translation ? _self.translation : translation // ignore: cast_nullable_to_non_nullable
-as String,
+as String,translations: null == translations ? _self._translations : translations // ignore: cast_nullable_to_non_nullable
+as Map<String, String>,
   ));
 }
 

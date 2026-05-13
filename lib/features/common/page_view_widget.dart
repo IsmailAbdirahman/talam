@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:talam/features/common/provider/translation_notifier.dart';
 import 'package:talam/features/common/share_and_fav_buttons.dart';
 import 'package:talam/features/common/text_widgets.dart';
 import 'package:talam/features/fav/presentation/widgets/share_social_media.dart';
@@ -46,7 +47,13 @@ class PageViewWidget extends ConsumerWidget {
                         child: TextWidget(data: ayah.verse.arabic),
                       ),
                       const SizedBox(height: 20),
-                      TextWidget(data: ayah.verse.translation),
+                      TextWidget(
+                        data:
+                            ayah.verse.translations[ref.watch(
+                              translationProvider,
+                            )] ??
+                            '',
+                      ),
                     ],
                   ),
                 ),

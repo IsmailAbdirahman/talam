@@ -24,16 +24,20 @@ abstract class QuranVerse with _$QuranVerse {
     required final int ayah,
     required final String arabic,
     required final String transliteration,
-    @JsonKey(name: 'translations', fromJson: _translationFromJson)
-    required final String translation,
+    @JsonKey(name: 'translations', fromJson: _translationsFromJson)
+    required final Map<String, String> translations,
   }) = _QuranVerse;
 
   factory QuranVerse.fromJson(Map<String, dynamic> json) =>
       _$QuranVerseFromJson(json);
 }
 
-String _translationFromJson(Map<String, dynamic> json) =>
-    json['sahih_international'] as String;
+Map<String, String> _translationsFromJson(Map<String, dynamic> json) {
+  return {
+    'sahih_international': json['sahih_international'] as String,
+    'pickthall': json['pickthall'] as String,
+  };
+}
 
 @freezed
 abstract class QuranAyah with _$QuranAyah {
