@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:talam/features/auth/presentation/providers/auth_controller.dart';
 import 'package:talam/features/auth/presentation/providers/current_user.dart';
+import 'package:talam/features/common/provider/theme_notifier.dart';
 import 'package:talam/features/fav/presentation/screen/fav.dart';
 import 'package:talam/features/profile/presentation/widgets/delete_account_dialog.dart';
 
@@ -11,8 +12,10 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
+    final themeMode = ref.watch(themeProvider);
+    final isDark = themeMode == ThemeMode.dark;
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 194, 194, 194),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
         padding: const EdgeInsets.all(19.0),
         child: Column(
@@ -51,7 +54,10 @@ class ProfileScreen extends ConsumerWidget {
                       onTap: () {
                         ref.read(authControllerProvider.notifier).signOut();
                       },
-                      child: Icon(Icons.logout_rounded, color: Colors.black38),
+                      child: Icon(
+                        Icons.logout_rounded,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                   ],
                 ),
@@ -82,6 +88,13 @@ class ProfileScreen extends ConsumerWidget {
                       ),
                     ),
                   ],
+                ),
+                ListTile(
+                  title: const Text('Dark Mode'),
+                  trailing: Switch(
+                    value: isDark,
+                    onChanged: (_) => ref.read(themeProvider.notifier).toggle(),
+                  ),
                 ),
               ],
             ),

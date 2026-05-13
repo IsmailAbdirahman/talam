@@ -5,8 +5,8 @@ import 'package:gal/gal.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:talam/features/common/text_widgets.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class ShareSocialMedia extends StatelessWidget {
   final QuranAyah quranAyah;
@@ -38,9 +38,9 @@ class ShareSocialMedia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 230, 230, 230),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 230, 230, 230),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         elevation: 0,
         leading: const CloseButton(),
       ),
@@ -146,15 +146,41 @@ class _ShareCard extends StatelessWidget {
           const SizedBox(height: 40),
 
           // Arabic text
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextWidget(data: quranAyah.verse.arabic),
+          Flexible(
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: AutoSizeText(
+                quranAyah.verse.arabic,
+                textDirection: TextDirection.rtl,
+                maxLines: 8,
+                minFontSize: 10,
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: const Color.fromARGB(255, 43, 43, 43),
+                  height: 1.8,
+                ),
+              ),
+            ),
           ),
 
           const SizedBox(height: 30),
 
           // Translation
-          TextWidget(data: quranAyah.verse.translation),
+          Flexible(
+            child: AutoSizeText(
+              quranAyah.verse.translation,
+              textAlign: TextAlign.center,
+              maxLines: 10,
+              minFontSize: 8,
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+                fontWeight: FontWeight.w600,
+                color: const Color.fromARGB(255, 43, 43, 43),
+                height: 1.6,
+              ),
+            ),
+          ),
 
           const SizedBox(height: 40),
 

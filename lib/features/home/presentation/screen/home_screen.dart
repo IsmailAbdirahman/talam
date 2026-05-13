@@ -12,7 +12,7 @@ class Home extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final data = ref.watch(quranAyaatProvider);
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 194, 194, 194),
+      backgroundColor: Theme.of(context).colorScheme.surface,
 
       body: Stack(
         children: [
@@ -28,6 +28,10 @@ class Home extends ConsumerWidget {
             child: GestureDetector(
               onTap: () {
                 showModalBottomSheet(
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.surface, // ← add this
+
                   context: context,
                   isScrollControlled: true,
                   builder: (context) => ClipRRect(

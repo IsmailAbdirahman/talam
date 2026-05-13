@@ -19,7 +19,7 @@ class PageViewWidget extends ConsumerWidget {
         final ayah = data[index];
 
         return Container(
-          color: const Color.fromARGB(255, 194, 194, 194),
+          color: Theme.of(context).colorScheme.surface,
           padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 60),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -30,7 +30,7 @@ class PageViewWidget extends ConsumerWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  color: const Color.fromARGB(255, 43, 43, 43),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 40),
@@ -58,15 +58,16 @@ class PageViewWidget extends ConsumerWidget {
                 style: GoogleFonts.poppins(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
-                  color: const Color.fromARGB(255, 43, 43, 43),
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  GestureDetector(
-                    onTap: () {
+                  ShareAndFavButtons(
+                    quranAyah: ayah,
+                    onSharePressed: () {
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
@@ -82,8 +83,6 @@ class PageViewWidget extends ConsumerWidget {
                         ),
                       );
                     },
-
-                    child: ShareAndFavButtons(quranAyah: ayah),
                   ),
                 ],
               ),

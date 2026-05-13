@@ -5,6 +5,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:talam/features/auth/core/config/supabase_config.dart';
 import 'package:talam/features/auth/core/router/app_router.dart';
 import 'package:talam/features/auth/core/theme/app_theme.dart';
+import 'package:talam/features/common/provider/theme_notifier.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,9 +28,12 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(goRouterProvider);
+    final themeMode = ref.watch(themeProvider);
+
     return MaterialApp.router(
-      title: 'Flutter Auth',
-      theme: AppTheme.light,
+      themeMode: themeMode,
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       routerConfig: router,
     );

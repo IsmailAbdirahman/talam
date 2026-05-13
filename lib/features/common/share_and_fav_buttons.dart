@@ -5,7 +5,13 @@ import 'package:talam/features/home/domain/quran_ayah.dart';
 
 class ShareAndFavButtons extends ConsumerWidget {
   final QuranAyah quranAyah;
-  const ShareAndFavButtons({super.key, required this.quranAyah});
+  final VoidCallback onSharePressed;
+
+  const ShareAndFavButtons({
+    super.key,
+    required this.quranAyah,
+    required this.onSharePressed,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -30,7 +36,10 @@ class ShareAndFavButtons extends ConsumerWidget {
           ),
           onPressed: () => controller.toggleFavourite(quranAyah),
         ),
-        Icon(Icons.save_alt_rounded),
+        IconButton(
+          icon: const Icon(Icons.save_alt_rounded),
+          onPressed: onSharePressed, // ← uses passed callback
+        ),
       ],
     );
   }

@@ -11,11 +11,11 @@ class FavScreen extends ConsumerWidget {
     final favData = ref.watch(favouritesControllerProvider);
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 194, 194, 194),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         elevation: 0,
         scrolledUnderElevation: 0,
-        backgroundColor: const Color.fromARGB(255, 194, 194, 194),
+        backgroundColor: Theme.of(context).colorScheme.surface,
       ),
       body: favData.when(
         loading: () => const Center(child: CircularProgressIndicator()),

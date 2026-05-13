@@ -12,7 +12,7 @@ class TextWidget extends StatelessWidget {
       style: GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: const Color.fromARGB(255, 43, 43, 43),
+        color: Theme.of(context).colorScheme.onSurface,
       ),
     );
   }
