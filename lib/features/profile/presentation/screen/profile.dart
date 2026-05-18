@@ -5,7 +5,6 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:talam/features/auth/presentation/providers/auth_controller.dart';
 import 'package:talam/features/auth/presentation/providers/current_user.dart';
 import 'package:talam/features/common/provider/theme_notifier.dart';
-import 'package:talam/features/common/provider/translation_notifier.dart';
 import 'package:talam/features/fav/presentation/screen/fav.dart';
 import 'package:talam/features/profile/presentation/widgets/delete_account_dialog.dart';
 
@@ -120,38 +119,6 @@ class ProfileScreen extends ConsumerWidget {
                   trailing: Switch(
                     value: isDark,
                     onChanged: (_) => ref.read(themeProvider.notifier).toggle(),
-                  ),
-                ),
-
-                ListTile(
-                  title: Text(
-                    "Translation",
-                    style: GoogleFonts.poppins(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  trailing: DropdownButton<String>(
-                    value: ref.watch(translationProvider),
-                    underline: const SizedBox.shrink(),
-                    items: const [
-                      DropdownMenuItem(
-                        value: 'sahih_international',
-                        child: Text('Sahih International'),
-                      ),
-                      DropdownMenuItem(
-                        value: 'pickthall',
-                        child: Text('Pickthall'),
-                      ),
-                    ],
-                    onChanged: (value) {
-                      if (value != null) {
-                        ref
-                            .read(translationProvider.notifier)
-                            .setTranslation(value);
-                      }
-                    },
                   ),
                 ),
               ],

@@ -26,7 +26,7 @@ _QuranVerse _$QuranVerseFromJson(Map<String, dynamic> json) => _QuranVerse(
   ayah: (json['ayah'] as num).toInt(),
   arabic: json['arabic'] as String,
   transliteration: json['transliteration'] as String,
-  translations: _translationsFromJson(
+  translation: _translationFromJson(
     json['translations'] as Map<String, dynamic>,
   ),
 );
@@ -37,7 +37,7 @@ Map<String, dynamic> _$QuranVerseToJson(_QuranVerse instance) =>
       'ayah': instance.ayah,
       'arabic': instance.arabic,
       'transliteration': instance.transliteration,
-      'translations': instance.translations,
+      'translations': _translationToJson(instance.translation),
     };
 
 _QuranAyah _$QuranAyahFromJson(Map<String, dynamic> json) => _QuranAyah(

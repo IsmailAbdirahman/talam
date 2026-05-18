@@ -6,7 +6,6 @@ import 'package:gal/gal.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:talam/features/common/provider/translation_notifier.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -93,14 +92,12 @@ class ShareSocialMedia extends StatelessWidget {
 }
 
 // ── The card UI that gets shared as an image ─────────────────────────────────
-class _ShareCard extends ConsumerWidget {
+class _ShareCard extends StatelessWidget {
   final QuranAyah quranAyah;
   const _ShareCard({required this.quranAyah});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final translationKey = ref.watch(translationProvider);
-
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -173,7 +170,7 @@ class _ShareCard extends ConsumerWidget {
           // Translation
           Flexible(
             child: AutoSizeText(
-              quranAyah.verse.translations[translationKey] ?? '',
+              quranAyah.verse.translation,
               textAlign: TextAlign.center,
               maxLines: 10,
               minFontSize: 8,

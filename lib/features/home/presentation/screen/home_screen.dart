@@ -70,7 +70,7 @@ class _HomeState extends ConsumerState<Home> {
         children: [
           data.when(
             loading: () => Center(child: CircularProgressIndicator()),
-            error: (e, _) => Text('Error'),
+            error: (e, _) => Center(child: Text('Error: $e')),
             data: (list) =>
                 PageViewWidget(data: list, controller: _pageController),
           ),

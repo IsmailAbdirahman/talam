@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'quran_ayah.freezed.dart';
@@ -24,20 +23,24 @@ abstract class QuranVerse with _$QuranVerse {
     required final int ayah,
     required final String arabic,
     required final String transliteration,
-    @JsonKey(name: 'translations', fromJson: _translationsFromJson)
-    required final Map<String, String> translations,
+    @JsonKey(
+      name: 'translations',
+      fromJson: _translationFromJson,
+      toJson: _translationToJson,
+    )
+    required final String translation,
   }) = _QuranVerse;
 
   factory QuranVerse.fromJson(Map<String, dynamic> json) =>
       _$QuranVerseFromJson(json);
 }
 
-Map<String, String> _translationsFromJson(Map<String, dynamic> json) {
-  return {
-    'sahih_international': json['sahih_international'] as String,
-    'pickthall': json['pickthall'] as String,
-  };
-}
+String _translationFromJson(Map<String, dynamic> json) =>
+    json['sahih_international'] as String;
+
+Map<String, dynamic> _translationToJson(String translation) => {
+  'sahih_international': translation,
+};
 
 @freezed
 abstract class QuranAyah with _$QuranAyah {
