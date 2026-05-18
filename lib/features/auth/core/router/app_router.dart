@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:talam/features/auth/data/auth_repository.dart';
-import 'package:talam/features/auth/presentation/providers/current_user.dart';
 import 'package:talam/features/auth/presentation/screens/login_screen.dart';
 import 'package:talam/features/home/presentation/screen/home_screen.dart';
 
