@@ -10,7 +10,11 @@ class TafsirSheet extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tafsir = ref.watch(tafsirContentProvider((surah: surah, ayah: ayah)));
+    final tafsirId = ref.watch(tafsirLanguageProvider);
+    final tafsir = ref.watch(
+      tafsirContentProvider((surah: surah, ayah: ayah, tafsirId: tafsirId)),
+    );
+    final isArabic = tafsirId == 14;
 
     return Container(
       decoration: BoxDecoration(
@@ -21,7 +25,6 @@ class TafsirSheet extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Drag handle
           Center(
             child: Container(
               width: 40,
@@ -36,13 +39,51 @@ class TafsirSheet extends ConsumerWidget {
           ),
           const SizedBox(height: 20),
 
-          Text(
-            'Tafsir Ibn Kathir',
-            style: GoogleFonts.poppins(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Tafsir Ibn Kathir',
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
+              ),
+              DropdownButton<int>(
+                value: tafsirId,
+                underline: const SizedBox.shrink(),
+                items: [
+                  DropdownMenuItem(
+                    value: 169,
+                    child: Text(
+                      'English',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 14,
+                    child: Text(
+                      'Arabic',
+                      style: GoogleFonts.poppins(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ),
+                ],
+                onChanged: (value) {
+                  if (value != null) {
+                    ref
+                        .read(tafsirLanguageProvider.notifier)
+                        .setLanguage(value);
+                  }
+                },
+              ),
+            ],
           ),
 
           const SizedBox(height: 8),
@@ -77,8 +118,12 @@ class TafsirSheet extends ConsumerWidget {
                 physics: const BouncingScrollPhysics(),
                 child: Text(
                   text,
+                  textDirection: isArabic
+                      ? TextDirection.rtl
+                      : TextDirection.ltr,
+                  textAlign: isArabic ? TextAlign.right : TextAlign.left,
                   style: GoogleFonts.poppins(
-                    fontSize: 14,
+                    fontSize: isArabic ? 16 : 14,
                     height: 1.7,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
