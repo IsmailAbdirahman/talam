@@ -32,7 +32,12 @@ class MyApp extends ConsumerWidget {
     return MaterialApp.router(
       themeMode: themeMode,
       theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      darkTheme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: const Color(0xFF11133F),
+        colorScheme: ThemeData.dark().colorScheme.copyWith(
+          surface: const Color(0xFF11133F),
+        ),
+      ),
       debugShowCheckedModeBanner: false,
       routerConfig: router,
     );

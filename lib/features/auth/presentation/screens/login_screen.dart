@@ -37,6 +37,7 @@ class LoginScreen extends ConsumerWidget {
     final showApple = kIsWeb ? true : (Platform.isIOS || Platform.isMacOS);
 
     return Scaffold(
+      backgroundColor: const Color(0xFF11133F),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -53,17 +54,7 @@ class LoginScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 28),
-              Text(
-                'Welcome',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineMedium,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Sign in to continue',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+
               const Spacer(flex: 4),
 
               // Google
