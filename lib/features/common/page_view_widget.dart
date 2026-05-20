@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:talam/features/common/share_and_fav_buttons.dart';
 import 'package:talam/features/common/text_widgets.dart';
-import 'package:talam/features/fav/presentation/widgets/share_social_media.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
+import 'package:talam/features/wallpaper/presentation/wallpaper_sheet.dart';
 
 class PageViewWidget extends ConsumerWidget {
   final List<QuranAyah> data;
@@ -91,15 +91,7 @@ class PageViewWidget extends ConsumerWidget {
                         context: context,
                         isScrollControlled: true,
                         backgroundColor: Colors.transparent,
-                        builder: (context) => ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(24),
-                          ),
-                          child: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.9,
-                            child: ShareSocialMedia(quranAyah: ayah),
-                          ),
-                        ),
+                        builder: (_) => WallpaperSheet(quranAyah: ayah),
                       );
                     },
                   ),
