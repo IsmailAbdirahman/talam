@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:talam/features/common/page_view_widget.dart';
 import 'package:talam/features/home/presentation/widgets/profile_and_fav.dart';
 import 'package:talam/features/home/repository/quran_repositary.dart';
@@ -69,7 +70,7 @@ class _HomeState extends ConsumerState<Home> {
       body: Stack(
         children: [
           data.when(
-            loading: () => Center(child: CircularProgressIndicator()),
+            loading: () => _ShimmerCard(),
             error: (e, _) => Center(child: Text('Error: $e')),
             data: (list) =>
                 PageViewWidget(data: list, controller: _pageController),
@@ -132,6 +133,78 @@ class _HomeState extends ConsumerState<Home> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ShimmerCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final base = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.1);
+    final highlight = Theme.of(
+      context,
+    ).colorScheme.onSurface.withValues(alpha: 0.2);
+
+    return Container(
+      color: Theme.of(context).colorScheme.surface,
+      padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 60),
+      child: Shimmer.fromColors(
+        baseColor: base,
+        highlightColor: highlight,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Surah name placeholder
+            Container(height: 14, width: 100, color: base),
+            const SizedBox(height: 40),
+
+            // Arabic text placeholders (3 lines, right aligned)
+            Align(
+              alignment: Alignment.centerRight,
+              child: Container(height: 24, width: double.infinity, color: base),
+            ),
+            const SizedBox(height: 12),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Container(height: 24, width: 250, color: base),
+            ),
+            const SizedBox(height: 12),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Container(height: 24, width: 180, color: base),
+            ),
+
+            const SizedBox(height: 30),
+
+            // Translation placeholders (3 lines)
+            Container(height: 16, width: double.infinity, color: base),
+            const SizedBox(height: 8),
+            Container(height: 16, width: double.infinity, color: base),
+            const SizedBox(height: 8),
+            Container(height: 16, width: 200, color: base),
+
+            const SizedBox(height: 35),
+
+            // Reference placeholder
+            Center(child: Container(height: 14, width: 60, color: base)),
+
+            const SizedBox(height: 40),
+
+            // Buttons row placeholder
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(height: 40, width: 40, color: base),
+                const SizedBox(width: 16),
+                Container(height: 40, width: 40, color: base),
+                const SizedBox(width: 16),
+                Container(height: 40, width: 40, color: base),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

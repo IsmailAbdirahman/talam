@@ -46,18 +46,10 @@ class LoginScreen extends ConsumerWidget {
               const Spacer(flex: 3),
               // Minimal logo mark.
               Center(
-                child: Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF111111),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: const Icon(
-                    Icons.bolt_rounded,
-                    color: Colors.white,
-                    size: 28,
-                  ),
+                child: SizedBox(
+                  width: 80,
+                  height: 80,
+                  child: Image.asset('assets/icon/icon.png'),
                 ),
               ),
               const SizedBox(height: 28),
