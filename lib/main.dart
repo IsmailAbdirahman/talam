@@ -5,11 +5,12 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:talam/features/auth/core/config/supabase_config.dart';
 import 'package:talam/features/auth/core/router/app_router.dart';
 import 'package:talam/features/common/provider/theme_notifier.dart';
+import 'package:talam/features/notification/notification_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   GoogleFonts.config.allowRuntimeFetching = true;
-
+  await NotificationService().init();
   await Supabase.initialize(
     url: SupabaseConfig.url,
     anonKey: SupabaseConfig.anonKey,
