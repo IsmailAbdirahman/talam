@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart'; // ✅ ADDED
 import 'package:google_fonts/google_fonts.dart';
 import 'package:talam/features/auth/presentation/providers/auth_controller.dart';
 
@@ -19,12 +20,21 @@ class _DeleteAccountDialogState extends ConsumerState<DeleteAccountDialog> {
 
     try {
       await ref.read(authControllerProvider.notifier).deleteAccount();
+
       if (!mounted) return;
-      Navigator.pop(context);
+
+      // ❌ REMOVED
+      // Navigator.pop(context);
+
+      // ❌ REMOVED
       // Router will redirect to /login automatically once auth state changes
+
+      context.go('/login'); // ✅ ADDED
     } catch (e) {
       if (!mounted) return;
+
       setState(() => _isDeleting = false);
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to delete: $e'),
