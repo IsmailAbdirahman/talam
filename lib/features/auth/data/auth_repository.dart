@@ -127,6 +127,21 @@ class AuthRepository {
     final bytes = utf8.encode(input);
     return sha256.convert(bytes).toString();
   }
+
+  /// Permanently delete the current user's account and all associated data.
+  Future<void> deleteAccount() async {
+    final response = await _client.functions.invoke(
+      'delete-account',
+      method: HttpMethod.post,
+    );
+
+    if (response.status != 200) {
+      throw Exception('Failed to delete account: ${response.data}');
+    }
+
+    // Sign out locally after server-side deletion
+    await _client.auth.signOut();
+  }
 }
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {

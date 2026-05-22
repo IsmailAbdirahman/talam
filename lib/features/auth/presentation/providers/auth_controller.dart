@@ -38,4 +38,11 @@ class AuthController extends _$AuthController {
       () => ref.read(authRepositoryProvider).signOut(),
     );
   }
+
+  Future<void> deleteAccount() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(
+      () => ref.read(authRepositoryProvider).deleteAccount(),
+    );
+  }
 }
