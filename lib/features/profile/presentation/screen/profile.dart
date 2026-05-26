@@ -17,6 +17,8 @@ class ProfileScreen extends ConsumerWidget {
     final user = ref.watch(currentUserProvider);
     final themeMode = ref.watch(themeProvider);
     final isDark = themeMode == ThemeMode.dark;
+    final avatarUrl = user?.avatarUrl;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Padding(
@@ -33,19 +35,22 @@ class ProfileScreen extends ConsumerWidget {
                   children: [
                     Row(
                       children: [
-                        Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black26, width: 2),
-                            shape: BoxShape.circle,
-                            color: Colors.white24,
-                          ),
-                          child: Icon(
-                            Icons.person,
-                            size: 20,
-                            color: Colors.black,
-                          ),
+                        CircleAvatar(
+                          radius: 36,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.1),
+                          backgroundImage: avatarUrl != null
+                              ? NetworkImage(avatarUrl)
+                              : null,
+                          child: avatarUrl == null
+                              ? Icon(
+                                  Icons.person,
+                                  size: 36,
+                                  color: Theme.of(context).colorScheme.onSurface
+                                      .withValues(alpha: 0.5),
+                                )
+                              : null,
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 14.0),
