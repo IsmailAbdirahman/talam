@@ -3,49 +3,50 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talam/features/auth/data/auth_repository.dart';
 import 'package:talam/features/auth/presentation/screens/login_screen.dart';
 import 'package:talam/features/home/presentation/screen/home_screen.dart';
+import 'package:talam/features/onboarding/presentation/onboarding_screen.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   ref.keepAlive();
 
   final notifier = _AuthRefreshNotifier(ref);
-
   ref.onDispose(notifier.dispose);
 
   return GoRouter(
-    initialLocation: '/login',
-
+    initialLocation: '/onboarding',
     refreshListenable: notifier,
+    redirect: (context, state) async {
+      final prefs = await SharedPreferences.getInstance();
+      final onboardingDone = prefs.getBool('onboarding_done') ?? false;
 
-    redirect: (context, state) {
-      // ❌ REMOVED
-      // final session = ref.read(authRepositoryProvider).currentUser;
+      final user = ref.read(authRepositoryProvider).currentUser;
+      final loggedIn = user != null;
 
-      final user = ref.read(authRepositoryProvider).currentUser; // ✅ ADDED
+      final loc = state.matchedLocation;
+      final goingToOnboard = loc == '/onboarding';
+      final goingToLogin = loc == '/login';
 
-      // ❌ REMOVED
-      // final loggedIn = session != null;
+      // First-time user — force onboarding
+      if (!onboardingDone && !goingToOnboard) return '/onboarding';
 
-      final loggedIn = user != null; // ✅ ADDED
+      // Onboarded but not logged in — force login
+      if (onboardingDone && !loggedIn && !goingToLogin) return '/login';
 
-      final goingToLogin = state.matchedLocation == '/login';
-
-      if (!loggedIn && !goingToLogin) {
-        return '/login';
-      }
-
-      if (loggedIn && goingToLogin) {
+      // Onboarded + logged in but on login/onboarding screen — go home
+      if (onboardingDone && loggedIn && (goingToOnboard || goingToLogin))
         return '/';
-      }
 
       return null;
     },
-
     routes: [
+      GoRoute(
+        path: '/onboarding',
+        builder: (_, __) => const OnboardingScreen(),
+      ),
       GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
-
       GoRoute(path: '/', builder: (_, __) => const Home()),
     ],
   );
