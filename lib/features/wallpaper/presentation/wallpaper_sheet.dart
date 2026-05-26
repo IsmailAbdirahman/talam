@@ -167,7 +167,7 @@ class _WallpaperSheetState extends ConsumerState<WallpaperSheet> {
                   return GestureDetector(
                     onTap: () => setState(() => selectedStyle = index),
                     child: Container(
-                      width: 60,
+                      width: 75,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         gradient: LinearGradient(

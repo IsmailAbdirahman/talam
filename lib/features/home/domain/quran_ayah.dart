@@ -35,8 +35,10 @@ abstract class QuranVerse with _$QuranVerse {
       _$QuranVerseFromJson(json);
 }
 
-String _translationFromJson(Map<String, dynamic> json) =>
-    json['sahih_international'] as String;
+String _translationFromJson(Map<String, dynamic> json) {
+  final raw = json['sahih_international'] as String;
+  return raw.replaceAll(RegExp(r'\s*;\d+'), '').trim();
+}
 
 Map<String, dynamic> _translationToJson(String translation) => {
   'sahih_international': translation,
