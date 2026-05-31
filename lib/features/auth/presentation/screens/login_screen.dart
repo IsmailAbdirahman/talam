@@ -7,6 +7,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_controller.dart';
 import '../widgets/social_auth_button.dart';
 
+import 'package:flutter/gestures.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
@@ -81,12 +84,50 @@ class LoginScreen extends ConsumerWidget {
               ],
 
               const SizedBox(height: 24),
-              Text(
-                'By continuing you agree to our Terms & Privacy Policy.',
+              RichText(
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: const Color(0xFF999999),
-                  fontSize: 12,
+                text: TextSpan(
+                  style: const TextStyle(
+                    color: Color(0xFF999999),
+                    fontSize: 12,
+                  ),
+                  children: [
+                    const TextSpan(text: 'By continuing you agree to our '),
+                    TextSpan(
+                      text: 'Terms',
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launchUrl(
+                            Uri.parse(
+                              'https://ismailabdirahman.github.io/talam-legal/terms.html',
+                            ),
+                            mode: LaunchMode.externalApplication,
+                          );
+                        },
+                    ),
+                    const TextSpan(text: ' & '),
+                    TextSpan(
+                      text: 'Privacy Policy',
+                      style: const TextStyle(
+                        decoration: TextDecoration.underline,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          launchUrl(
+                            Uri.parse(
+                              'https://ismailabdirahman.github.io/talam-legal/privacy.html',
+                            ),
+                            mode: LaunchMode.externalApplication,
+                          );
+                        },
+                    ),
+                    const TextSpan(text: '.'),
+                  ],
                 ),
               ),
               const SizedBox(height: 20),

@@ -8,6 +8,7 @@ import 'package:talam/features/common/provider/theme_notifier.dart';
 import 'package:talam/features/fav/presentation/screen/fav.dart';
 import 'package:talam/features/notification/notification_service.dart';
 import 'package:talam/features/profile/presentation/widgets/delete_account_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -223,7 +224,12 @@ class ProfileScreen extends ConsumerWidget {
 
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [RatingApp(), DeleteButton()],
+              children: [
+                PrivacyPolicy(),
+                TermsofService(),
+                RatingApp(),
+                DeleteButton(),
+              ],
             ),
           ],
         ),
@@ -315,6 +321,60 @@ class DeleteButton extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class PrivacyPolicy extends StatelessWidget {
+  const PrivacyPolicy({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        'Privacy Policy',
+        style: GoogleFonts.poppins(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+      trailing: const Icon(Icons.open_in_new, size: 18),
+      onTap: () {
+        launchUrl(
+          Uri.parse(
+            'https://ismailabdirahman.github.io/talam-legal/privacy.html',
+          ),
+          mode: LaunchMode.externalApplication,
+        );
+      },
+    );
+  }
+}
+
+class TermsofService extends StatelessWidget {
+  const TermsofService({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        'Terms of Service',
+        style: GoogleFonts.poppins(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
+      ),
+      trailing: const Icon(Icons.open_in_new, size: 18),
+      onTap: () {
+        launchUrl(
+          Uri.parse(
+            'https://ismailabdirahman.github.io/talam-legal/terms.html',
+          ),
+          mode: LaunchMode.externalApplication,
+        );
+      },
     );
   }
 }
