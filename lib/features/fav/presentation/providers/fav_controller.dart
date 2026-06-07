@@ -1,12 +1,9 @@
-// features/favourites/controller/favourites_controller.dart
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:talam/features/fav/data/fav_repository.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
 
-import '../service/fav_service.dart';
-
-part 'fav_repository.g.dart';
+part 'fav_controller.g.dart';
 
 @riverpod
 class FavouritesController extends _$FavouritesController {
@@ -26,7 +23,6 @@ class FavouritesController extends _$FavouritesController {
     );
 
     if (isSaved) {
-      // Remove from UI instantly
       state = AsyncData(
         current
             .where(
@@ -38,12 +34,10 @@ class FavouritesController extends _$FavouritesController {
       );
       await repo.removeAyah(ayah.surah.number, ayah.verse.ayah);
     } else {
-      // Add to UI instantly
       state = AsyncData([ayah, ...current]);
       await repo.saveAyah(ayah);
     }
 
-    // Also refresh fav screen list
     ref.invalidate(favAyaatProvider);
   }
 

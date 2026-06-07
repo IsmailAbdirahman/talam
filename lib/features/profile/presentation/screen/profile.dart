@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:in_app_review/in_app_review.dart';
 import 'package:talam/features/auth/presentation/providers/auth_controller.dart';
 import 'package:talam/features/auth/presentation/providers/current_user.dart';
 import 'package:talam/features/common/provider/theme_notifier.dart';
 import 'package:talam/features/fav/presentation/screen/fav.dart';
-import 'package:talam/features/notification/notification_service.dart';
-import 'package:talam/features/profile/presentation/widgets/delete_account_dialog.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:talam/features/profile/presentation/widgets/daily_reminder_section.dart';
+import 'package:talam/features/profile/presentation/widgets/delete_button.dart';
+import 'package:talam/features/profile/presentation/widgets/privacy_policy.dart';
+import 'package:talam/features/profile/presentation/widgets/rating_app.dart';
+import 'package:talam/features/profile/presentation/widgets/terms_of_service.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -16,7 +17,7 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
-    final themeMode = ref.watch(themeProvider);
+    final themeMode = ref.watch(themeProvider).asData?.value ?? ThemeMode.light;
     final isDark = themeMode == ThemeMode.dark;
     final avatarUrl = user?.avatarUrl;
 
@@ -26,8 +27,6 @@ class ProfileScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(19.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-          //   crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
               children: [
@@ -38,9 +37,10 @@ class ProfileScreen extends ConsumerWidget {
                       children: [
                         CircleAvatar(
                           radius: 36,
-                          backgroundColor: Theme.of(
-                            context,
-                          ).colorScheme.onSurface.withValues(alpha: 0.1),
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.1),
                           backgroundImage: avatarUrl != null
                               ? NetworkImage(avatarUrl)
                               : null,
@@ -48,7 +48,9 @@ class ProfileScreen extends ConsumerWidget {
                               ? Icon(
                                   Icons.person,
                                   size: 36,
-                                  color: Theme.of(context).colorScheme.onSurface
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
                                       .withValues(alpha: 0.5),
                                 )
                               : null,
@@ -78,19 +80,19 @@ class ProfileScreen extends ConsumerWidget {
                   ],
                 ),
 
-                // Divider
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 24),
                   child: Container(
                     height: 1,
                     width: double.infinity,
-                    color: Theme.of(
-                      context,
-                    ).colorScheme.onSurface.withValues(alpha: 0.15),
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurface
+                        .withValues(alpha: 0.15),
                   ),
                 ),
 
-                SizedBox(height: 80),
+                const SizedBox(height: 80),
 
                 ListTile(
                   title: Text(
@@ -125,104 +127,16 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                   trailing: Switch(
                     value: isDark,
-                    onChanged: (_) => ref.read(themeProvider.notifier).toggle(),
+                    onChanged: (_) =>
+                        ref.read(themeProvider.notifier).toggle(),
                   ),
                 ),
-                Consumer(
-                  builder: (context, ref, _) {
-                    final settingsAsync = ref.watch(
-                      notificationSettingsProvider,
-                    );
 
-                    return settingsAsync.when(
-                      loading: () => const SizedBox.shrink(),
-                      error: (_, __) => const SizedBox.shrink(),
-                      data: (settings) {
-                        final timeLabel =
-                            '${settings.hour.toString().padLeft(2, '0')}:${settings.minute.toString().padLeft(2, '0')}';
-
-                        return Column(
-                          children: [
-                            ListTile(
-                              title: Text(
-                                'Daily Reminder',
-                                style: GoogleFonts.poppins(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.onSurface,
-                                ),
-                              ),
-                              trailing: Switch(
-                                value: settings.enabled,
-                                onChanged: (value) async {
-                                  final notifier = ref.read(
-                                    notificationSettingsProvider.notifier,
-                                  );
-                                  if (value) {
-                                    await notifier.enable(
-                                      settings.hour,
-                                      settings.minute,
-                                    );
-                                  } else {
-                                    await notifier.disable();
-                                  }
-                                },
-                              ),
-                            ),
-                            if (settings.enabled)
-                              ListTile(
-                                title: Text(
-                                  'Time',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w600,
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.onSurface,
-                                  ),
-                                ),
-                                trailing: TextButton(
-                                  onPressed: () async {
-                                    final time = await showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay(
-                                        hour: settings.hour,
-                                        minute: settings.minute,
-                                      ),
-                                    );
-                                    if (time != null) {
-                                      await ref
-                                          .read(
-                                            notificationSettingsProvider
-                                                .notifier,
-                                          )
-                                          .updateTime(time.hour, time.minute);
-                                    }
-                                  },
-                                  child: Text(
-                                    timeLabel,
-                                    style: GoogleFonts.poppins(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                      color: Theme.of(
-                                        context,
-                                      ).colorScheme.onSurface,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
+                const DailyReminderSection(),
               ],
             ),
 
-            Column(
+            const Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 PrivacyPolicy(),
@@ -234,147 +148,6 @@ class ProfileScreen extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class RatingApp extends StatelessWidget {
-  const RatingApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        "Rate the App",
-        style: GoogleFonts.poppins(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: Theme.of(context).colorScheme.onSurface,
-        ),
-      ),
-      trailing: Icon(
-        Icons.star_outline_rounded,
-        color: Theme.of(context).colorScheme.onSurface,
-        size: 22,
-      ),
-      onTap: () async {
-        final InAppReview inAppReview = InAppReview.instance;
-
-        if (await inAppReview.isAvailable()) {
-          inAppReview.requestReview();
-        } else {
-          // Fallback — open App Store directly
-          inAppReview.openStoreListing(
-            appStoreId: 'YOUR_APP_STORE_ID', // get this after publishing
-          );
-        }
-      },
-    );
-  }
-}
-
-class DeleteButton extends StatelessWidget {
-  const DeleteButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-
-      child: Align(
-        alignment: Alignment.centerLeft,
-
-        child: OutlinedButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (_) => const DeleteAccountDialog(),
-            );
-          },
-
-          style: OutlinedButton.styleFrom(
-            minimumSize: const Size(0, 40), // ✅ smaller height
-
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-
-            side: BorderSide(
-              color: Colors.red.withValues(alpha: 0.35), // ✅ subtle border
-            ),
-
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-
-            visualDensity: VisualDensity.compact, // ✅ less visual weight
-          ),
-
-          child: Text(
-            'Delete Account',
-
-            style: GoogleFonts.poppins(
-              fontSize: 13.5, // ✅ smaller text
-              fontWeight: FontWeight.w500,
-              color: Colors.red.withValues(alpha: 0.8),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class PrivacyPolicy extends StatelessWidget {
-  const PrivacyPolicy({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        'Privacy Policy',
-        style: GoogleFonts.poppins(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: Theme.of(context).colorScheme.onSurface,
-        ),
-      ),
-      trailing: const Icon(Icons.open_in_new, size: 18),
-      onTap: () {
-        launchUrl(
-          Uri.parse(
-            'https://ismailabdirahman.github.io/talam-legal/privacy.html',
-          ),
-          mode: LaunchMode.externalApplication,
-        );
-      },
-    );
-  }
-}
-
-class TermsofService extends StatelessWidget {
-  const TermsofService({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        'Terms of Service',
-        style: GoogleFonts.poppins(
-          fontSize: 16,
-          fontWeight: FontWeight.w600,
-          color: Theme.of(context).colorScheme.onSurface,
-        ),
-      ),
-      trailing: const Icon(Icons.open_in_new, size: 18),
-      onTap: () {
-        launchUrl(
-          Uri.parse(
-            'https://ismailabdirahman.github.io/talam-legal/terms.html',
-          ),
-          mode: LaunchMode.externalApplication,
-        );
-      },
     );
   }
 }

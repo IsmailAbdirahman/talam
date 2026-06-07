@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
+import 'package:talam/features/home/repository/ayah_source.dart';
 import 'package:talam/features/home/service/home_service.dart';
 
 const Map<int, int> surahAyahCount = {
@@ -124,7 +125,8 @@ const Map<int, int> surahAyahCount = {
 };
 
 class QuranRepositary {
-  HomeService homeService = HomeService();
+  final AyahSource ayahSource;
+  QuranRepositary(this.ayahSource);
 
   static const _ayahsKey = 'todays_ayahs';
   static const _dateKey = 'todays_date';
@@ -149,7 +151,7 @@ class QuranRepositary {
       final surahNumber = random.nextInt(114) + 1;
       final maxAyah = surahAyahCount[surahNumber]!;
       final ayahNumber = random.nextInt(maxAyah) + 1;
-      futures.add(homeService.fetchRandomAyah(surahNumber, ayahNumber));
+      futures.add(ayahSource.fetchRandomAyah(surahNumber, ayahNumber));
     }
 
     final ayahs = await Future.wait(futures);
@@ -167,8 +169,10 @@ class QuranRepositary {
   }
 }
 
+final ayahSourceProvider = Provider<AyahSource>((ref) => HttpAyahSource());
+
 final quranRepositaryProvider = Provider<QuranRepositary>((ref) {
-  return QuranRepositary();
+  return QuranRepositary(ref.watch(ayahSourceProvider));
 });
 
 final quranAyaatProvider = FutureProvider<List<QuranAyah>>((ref) async {

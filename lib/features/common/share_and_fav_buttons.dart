@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:talam/features/fav/repository/fav_repository.dart';
+import 'package:talam/features/fav/presentation/providers/fav_controller.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
 import 'package:talam/features/home/presentation/widgets/tafsir_sheet.dart';
 

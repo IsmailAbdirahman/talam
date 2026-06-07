@@ -1,4 +1,4 @@
-// features/favourites/repository/favourites_repository.dart
+import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -8,7 +8,6 @@ class FavouritesRepository {
   final SupabaseClient _client;
   FavouritesRepository(this._client);
 
-  // save ayah
   Future<void> saveAyah(QuranAyah quranAyah) async {
     await _client.from('favourites').insert({
       'user_id': _client.auth.currentUser!.id,
@@ -17,10 +16,10 @@ class FavouritesRepository {
       'ayah_number': quranAyah.verse.ayah,
       'arabic': quranAyah.verse.arabic,
       'translation': quranAyah.verse.translation,
+      'data': jsonEncode(quranAyah.toJson()),
     });
   }
 
-  // remove ayah
   Future<void> removeAyah(int surahNumber, int ayahNumber) async {
     await _client
         .from('favourites')
@@ -38,6 +37,11 @@ class FavouritesRepository {
         .order('created_at', ascending: false);
 
     return response.map((item) {
+      final raw = item['data'] as String?;
+      if (raw != null) {
+        return QuranAyah.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+      }
+      // Fallback for rows saved before the data column was added
       return QuranAyah(
         surah: QuranSurah(
           number: item['surah_number'],
@@ -56,7 +60,6 @@ class FavouritesRepository {
     }).toList();
   }
 
-  // check if ayah is already saved
   Future<bool> isFavourite(int surahNumber, int ayahNumber) async {
     final response = await _client
         .from('favourites')
@@ -72,9 +75,7 @@ final favouritesRepositoryProvider = Provider<FavouritesRepository>((ref) {
   return FavouritesRepository(Supabase.instance.client);
 });
 
-final favAyaatProvider = FutureProvider.autoDispose<List<QuranAyah>>((
-  ref,
-) async {
+final favAyaatProvider = FutureProvider.autoDispose<List<QuranAyah>>((ref) async {
   final repository = ref.watch(favouritesRepositoryProvider);
   return repository.getFavourites();
 });
