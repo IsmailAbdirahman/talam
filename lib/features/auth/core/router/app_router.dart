@@ -3,26 +3,25 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talam/features/auth/data/auth_repository.dart';
 import 'package:talam/features/auth/presentation/screens/login_screen.dart';
 import 'package:talam/features/fav/presentation/screen/fav.dart';
 import 'package:talam/features/home/presentation/screen/home_screen.dart';
+import 'package:talam/features/onboarding/controller/onboarding_controller.dart';
 import 'package:talam/features/onboarding/presentation/onboarding_screen.dart';
 import 'package:talam/features/profile/presentation/screen/profile.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   ref.keepAlive();
 
-  final notifier = _AuthRefreshNotifier(ref);
+  final notifier = _AppRefreshNotifier(ref);
   ref.onDispose(notifier.dispose);
 
   return GoRouter(
     initialLocation: '/onboarding',
     refreshListenable: notifier,
     redirect: (context, state) async {
-      final prefs = await SharedPreferences.getInstance();
-      final onboardingDone = prefs.getBool('onboarding_done') ?? false;
+      final onboardingDone = await ref.read(onboardingProvider.future);
 
       final user = ref.read(authRepositoryProvider).currentUser;
       final loggedIn = user != null;
@@ -63,18 +62,23 @@ final goRouterProvider = Provider<GoRouter>((ref) {
   );
 });
 
-class _AuthRefreshNotifier extends ChangeNotifier {
-  _AuthRefreshNotifier(Ref ref) {
-    _sub = ref.read(authRepositoryProvider).authStateChanges().listen((_) {
+class _AppRefreshNotifier extends ChangeNotifier {
+  _AppRefreshNotifier(Ref ref) {
+    _authSub = ref.read(authRepositoryProvider).authStateChanges().listen((_) {
+      notifyListeners();
+    });
+    _onboardingSub = ref.listen(onboardingProvider, (_, __) {
       notifyListeners();
     });
   }
 
-  late final StreamSubscription _sub;
+  late final StreamSubscription _authSub;
+  late final ProviderSubscription<AsyncValue<bool>> _onboardingSub;
 
   @override
   void dispose() {
-    _sub.cancel();
+    _authSub.cancel();
+    _onboardingSub.close();
     super.dispose();
   }
 }
