@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:talam/features/common/share_and_fav_buttons.dart';
-import 'package:talam/features/common/text_widgets.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
 import 'package:talam/features/wallpaper/presentation/wallpaper_sheet.dart';
 
@@ -62,10 +61,24 @@ class PageViewWidget extends ConsumerWidget {
                     children: [
                       Align(
                         alignment: Alignment.centerRight,
-                        child: TextWidget(data: ayah.verse.arabic),
+                        child: Text(
+                          ayah.verse.arabic,
+                          style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 20),
-                      TextWidget(data: ayah.verse.translation),
+                      Text(
+                        ayah.verse.translation,
+                        style: GoogleFonts.poppins(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
                     ],
                   ),
                 ),

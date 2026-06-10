@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gal/gal.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
+import 'package:talam/features/wallpaper/service/wallpaper_service.dart';
+import 'package:talam/features/wallpaper/wallpaper_style.dart';
 
 class WallpaperSheet extends ConsumerStatefulWidget {
   final QuranAyah quranAyah;
@@ -14,52 +14,16 @@ class WallpaperSheet extends ConsumerStatefulWidget {
 }
 
 class _WallpaperSheetState extends ConsumerState<WallpaperSheet> {
-  int selectedStyle = 0;
-  bool isSaving = false;
-  final ScreenshotController _screenshotController = ScreenshotController();
+  int _selectedIndex = 0;
+  bool _isSaving = false;
 
-  final styles = [
-    _WallpaperStyle(
-      name: 'Midnight',
-      gradient: const [Color(0xFF11133F), Color(0xFF2A2D5E)],
-      textColor: Colors.white,
-      accentColor: const Color(0xFFE8C674),
-    ),
-    _WallpaperStyle(
-      name: 'Sunset',
-      gradient: const [Color(0xFFF6B17A), Color(0xFF7B5E57)],
-      textColor: Colors.white,
-      accentColor: const Color(0xFFFFE5C2),
-    ),
-    _WallpaperStyle(
-      name: 'Cream',
-      gradient: const [Color(0xFFF5E6D3), Color(0xFFE8D5B7)],
-      textColor: const Color(0xFF3A2E22),
-      accentColor: const Color(0xFF8B6F47),
-    ),
-    _WallpaperStyle(
-      name: 'Ocean',
-      gradient: const [Color(0xFF1A4D5C), Color(0xFF0D2A33)],
-      textColor: Colors.white,
-      accentColor: const Color(0xFFB8D4DA),
-    ),
-  ];
-
-  Future<void> _saveWallpaper() async {
-    setState(() => isSaving = true);
-
+  Future<void> _save() async {
+    setState(() => _isSaving = true);
     try {
-      final image = await _screenshotController.captureFromWidget(
-        _WallpaperCanvas(
-          quranAyah: widget.quranAyah,
-          style: styles[selectedStyle],
-        ),
-        pixelRatio: 3.0,
-        targetSize: const Size(1290, 2796),
+      final style = WallpaperStyle.all[_selectedIndex];
+      await ref.read(wallpaperServiceProvider).captureAndSave(
+        WallpaperCanvas(quranAyah: widget.quranAyah, style: style),
       );
-
-      await Gal.putImageBytes(image, album: 'Talam');
-
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -77,13 +41,13 @@ class _WallpaperSheetState extends ConsumerState<WallpaperSheet> {
         ),
       );
     } finally {
-      if (mounted) setState(() => isSaving = false);
+      if (mounted) setState(() => _isSaving = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final style = styles[selectedStyle];
+    final style = WallpaperStyle.all[_selectedIndex];
 
     return Container(
       decoration: BoxDecoration(
@@ -135,7 +99,7 @@ class _WallpaperSheetState extends ConsumerState<WallpaperSheet> {
 
             const SizedBox(height: 20),
 
-            // Live preview (capped height)
+            // Live preview
             Center(
               child: SizedBox(
                 height: 320,
@@ -143,7 +107,7 @@ class _WallpaperSheetState extends ConsumerState<WallpaperSheet> {
                   aspectRatio: 9 / 19.5,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: _WallpaperCanvas(
+                    child: WallpaperCanvas(
                       quranAyah: widget.quranAyah,
                       style: style,
                     ),
@@ -159,13 +123,13 @@ class _WallpaperSheetState extends ConsumerState<WallpaperSheet> {
               height: 60,
               child: ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: styles.length,
+                itemCount: WallpaperStyle.all.length,
                 separatorBuilder: (_, __) => const SizedBox(width: 12),
                 itemBuilder: (context, index) {
-                  final s = styles[index];
-                  final isSelected = index == selectedStyle;
+                  final s = WallpaperStyle.all[index];
+                  final isSelected = index == _selectedIndex;
                   return GestureDetector(
-                    onTap: () => setState(() => selectedStyle = index),
+                    onTap: () => setState(() => _selectedIndex = index),
                     child: Container(
                       width: 75,
                       decoration: BoxDecoration(
@@ -204,7 +168,7 @@ class _WallpaperSheetState extends ConsumerState<WallpaperSheet> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: isSaving ? null : _saveWallpaper,
+                onPressed: _isSaving ? null : _save,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 43, 43, 43),
                   padding: const EdgeInsets.symmetric(vertical: 16),
@@ -212,7 +176,7 @@ class _WallpaperSheetState extends ConsumerState<WallpaperSheet> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: isSaving
+                child: _isSaving
                     ? const SizedBox(
                         width: 20,
                         height: 20,
@@ -238,24 +202,13 @@ class _WallpaperSheetState extends ConsumerState<WallpaperSheet> {
   }
 }
 
-class _WallpaperStyle {
-  final String name;
-  final List<Color> gradient;
-  final Color textColor;
-  final Color accentColor;
-  _WallpaperStyle({
-    required this.name,
-    required this.gradient,
-    required this.textColor,
-    required this.accentColor,
-  });
-}
-
-// ── The actual wallpaper image (1290×2796 iPhone resolution) ─────────────────
-class _WallpaperCanvas extends StatelessWidget {
+// The wallpaper image itself — rendered at 1290×2796 for iPhone resolution.
+// Used both as the live preview (scaled down via FittedBox) and as the
+// off-screen capture target in WallpaperService.
+class WallpaperCanvas extends StatelessWidget {
   final QuranAyah quranAyah;
-  final _WallpaperStyle style;
-  const _WallpaperCanvas({required this.quranAyah, required this.style});
+  final WallpaperStyle style;
+  const WallpaperCanvas({super.key, required this.quranAyah, required this.style});
 
   @override
   Widget build(BuildContext context) {
@@ -341,7 +294,6 @@ class _WallpaperCanvas extends StatelessWidget {
                 ),
 
                 // Bottom — Talam watermark
-                // Bottom — Talam branding
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [

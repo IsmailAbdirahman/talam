@@ -15,17 +15,12 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    ref.watch(authControllerProvider).isLoading;
-    final isGoogleLoading = ref
-        .watch(authControllerProvider.notifier)
-        .isGoogleLoading;
-    final isAppleLoading = ref
-        .watch(authControllerProvider.notifier)
-        .isAppleLoading;
+    final authState = ref.watch(authControllerProvider);
+    final isGoogleLoading = authState.isGoogleLoading;
+    final isAppleLoading = authState.isAppleLoading;
 
-    // Surface any auth error as a snackbar.
-    ref.listen(authControllerProvider, (previous, next) {
-      if (next.hasError && !next.isLoading) {
+    ref.listen(authControllerProvider, (_, next) {
+      if (next.error != null) {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
           ..showSnackBar(

@@ -4,12 +4,11 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:talam/features/common/page_view_widget.dart';
-import 'package:talam/features/home/presentation/widgets/profile_and_fav.dart';
 import 'package:talam/features/home/repository/quran_repositary.dart';
-import 'package:talam/features/profile/presentation/screen/profile.dart';
 
 class Home extends ConsumerStatefulWidget {
-  const Home({super.key});
+  final WidgetBuilder profileBuilder;
+  const Home({super.key, required this.profileBuilder});
 
   @override
   ConsumerState<Home> createState() => _HomeState();
@@ -124,12 +123,24 @@ class _HomeState extends ConsumerState<Home> {
                     ),
                     child: SizedBox(
                       height: MediaQuery.of(context).size.height * 0.9,
-                      child: const ProfileScreen(),
+                      child: widget.profileBuilder(context),
                     ),
                   ),
                 );
               },
-              child: const ProfileAndFav(),
+              child: Container(
+                height: 41,
+                width: 41,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white24,
+                ),
+                child: const Icon(
+                  Icons.person,
+                  size: 20,
+                  color: Colors.black,
+                ),
+              ),
             ),
           ),
         ],

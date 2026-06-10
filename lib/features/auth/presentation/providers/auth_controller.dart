@@ -1,48 +1,57 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/auth_repository.dart';
 
 part 'auth_controller.g.dart';
 
+@immutable
+class AuthState {
+  final bool isGoogleLoading;
+  final bool isAppleLoading;
+  final Object? error;
+
+  const AuthState({
+    this.isGoogleLoading = false,
+    this.isAppleLoading = false,
+    this.error,
+  });
+
+  static const idle = AuthState();
+}
+
 @Riverpod(keepAlive: true)
 class AuthController extends _$AuthController {
-  bool isGoogleLoading = false;
-  bool isAppleLoading = false;
   @override
-  Future<void> build() async {}
+  AuthState build() => AuthState.idle;
 
   Future<void> signInWithGoogle() async {
-    isGoogleLoading = true;
-    state = const AsyncLoading();
-    final result = await AsyncValue.guard(
-      () => ref.read(authRepositoryProvider).signInWithGoogle(),
-    );
-    isGoogleLoading = false;
-    state = result;
+    state = const AuthState(isGoogleLoading: true);
+    try {
+      await ref.read(authRepositoryProvider).signInWithGoogle();
+      state = AuthState.idle;
+    } catch (e) {
+      state = AuthState(error: e);
+    }
   }
 
   Future<void> signInWithApple() async {
-    isAppleLoading = true;
-    state = const AsyncLoading();
-    final result = await AsyncValue.guard(
-      () => ref.read(authRepositoryProvider).signInWithApple(),
-    );
-    isAppleLoading = false;
-    state = result;
+    state = const AuthState(isAppleLoading: true);
+    try {
+      await ref.read(authRepositoryProvider).signInWithApple();
+      state = AuthState.idle;
+    } catch (e) {
+      state = AuthState(error: e);
+    }
   }
 
   Future<void> signOut() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(
-      () => ref.read(authRepositoryProvider).signOut(),
-    );
+    try {
+      await ref.read(authRepositoryProvider).signOut();
+    } catch (_) {}
   }
 
   Future<void> deleteAccount() async {
-    state = const AsyncLoading();
-    state = await AsyncValue.guard(
-      () => ref.read(authRepositoryProvider).deleteAccount(),
-    );
+    await ref.read(authRepositoryProvider).deleteAccount();
   }
 }
