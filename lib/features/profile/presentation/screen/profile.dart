@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:talam/features/auth/presentation/providers/auth_controller.dart';
 import 'package:talam/features/auth/presentation/providers/current_user.dart';
 import 'package:talam/features/common/provider/theme_notifier.dart';
-import 'package:talam/features/fav/presentation/screen/fav.dart';
 import 'package:talam/features/profile/presentation/widgets/daily_reminder_section.dart';
 import 'package:talam/features/profile/presentation/widgets/delete_button.dart';
 import 'package:talam/features/profile/presentation/widgets/privacy_policy.dart';
@@ -12,7 +11,8 @@ import 'package:talam/features/profile/presentation/widgets/rating_app.dart';
 import 'package:talam/features/profile/presentation/widgets/terms_of_service.dart';
 
 class ProfileScreen extends ConsumerWidget {
-  const ProfileScreen({super.key});
+  final VoidCallback onOpenFavourites;
+  const ProfileScreen({super.key, required this.onOpenFavourites});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -108,12 +108,7 @@ class ProfileScreen extends ConsumerWidget {
                     color: Theme.of(context).colorScheme.onSurface,
                     size: 18,
                   ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => FavScreen()),
-                    );
-                  },
+                  onTap: onOpenFavourites,
                 ),
 
                 ListTile(

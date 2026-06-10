@@ -1,13 +1,15 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talam/features/auth/data/auth_repository.dart';
 import 'package:talam/features/auth/presentation/screens/login_screen.dart';
+import 'package:talam/features/fav/presentation/screen/fav.dart';
 import 'package:talam/features/home/presentation/screen/home_screen.dart';
 import 'package:talam/features/onboarding/presentation/onboarding_screen.dart';
+import 'package:talam/features/profile/presentation/screen/profile.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
   ref.keepAlive();
@@ -47,7 +49,16 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         builder: (_, __) => const OnboardingScreen(),
       ),
       GoRoute(path: '/login', builder: (_, __) => const LoginScreen()),
-      GoRoute(path: '/', builder: (_, __) => const Home()),
+      GoRoute(
+        path: '/',
+        builder: (_, __) => Home(
+          profileBuilder: (context) => ProfileScreen(
+            onOpenFavourites: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const FavScreen()),
+            ),
+          ),
+        ),
+      ),
     ],
   );
 });

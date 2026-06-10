@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:talam/features/fav/presentation/providers/fav_controller.dart';
 import 'package:talam/features/home/domain/quran_ayah.dart';
-import 'package:talam/features/home/presentation/widgets/tafsir_sheet.dart';
+import 'package:talam/features/common/tafsir_sheet.dart';
 
 class ShareAndFavButtons extends ConsumerWidget {
   final QuranAyah quranAyah;
