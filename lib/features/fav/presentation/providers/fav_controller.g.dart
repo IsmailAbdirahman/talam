@@ -34,7 +34,7 @@ final class FavouritesControllerProvider
 }
 
 String _$favouritesControllerHash() =>
-    r'8fcd2ec6ec7d3ca3bf0b9b85f0aabf376ea6e9ca';
+    r'2b71e1832a18c9309a93924ad79492c8eb65025e';
 
 abstract class _$FavouritesController extends $AsyncNotifier<List<QuranAyah>> {
   FutureOr<List<QuranAyah>> build();
