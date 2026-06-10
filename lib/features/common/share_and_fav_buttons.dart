@@ -20,11 +20,7 @@ class ShareAndFavButtons extends ConsumerWidget {
     final favsAsync = ref.watch(favouritesControllerProvider);
 
     final isFavourite = favsAsync.maybeWhen(
-      data: (list) => list.any(
-        (a) =>
-            a.surah.number == quranAyah.surah.number &&
-            a.verse.ayah == quranAyah.verse.ayah,
-      ),
+      data: (list) => list.any((a) => a.sameAyah(quranAyah)),
       orElse: () => false,
     );
 

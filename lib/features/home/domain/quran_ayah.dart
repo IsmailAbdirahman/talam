@@ -54,3 +54,8 @@ abstract class QuranAyah with _$QuranAyah {
   factory QuranAyah.fromJson(Map<String, dynamic> json) =>
       _$QuranAyahFromJson(json);
 }
+
+extension QuranAyahIdentity on QuranAyah {
+  bool sameAyah(QuranAyah other) =>
+      surah.number == other.surah.number && verse.ayah == other.verse.ayah;
+}
